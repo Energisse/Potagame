@@ -3,7 +3,7 @@ public class Legume {
     for (Graines g : Graines.values()){
 
     }
-    private void croissance(){
+    private void croissance(){//la croissance prend en compte l'ensoleillement,la température et l'humidité
 
     }
 }
