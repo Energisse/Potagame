@@ -1,3 +1,4 @@
+package Modele;
 public class Meteo {
     private float getTemperature (float tptr){
         return tptr ;
