@@ -141,6 +141,7 @@ public class Parcelle  extends JLayeredPane  implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {
+
         //Si la parcelle est modifié on met a jour l'image du legume
         Legume legume = Modele.getInstance().getLegume(indiceX, indiceY);
 

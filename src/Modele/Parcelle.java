@@ -63,9 +63,13 @@ public class Parcelle implements Runnable {
 
     @Override
     public void run() {
+        //mise a jour de l'humidité
+        this.humidite++;
+        if (this.humidite > 100) this.humidite = 100;
+
         //Si la parcelle contient un légume, on le fait pousser
         if (this.legume != null){
-            this.legume.pousser();
+            this.legume.pousser(this);
         }
     }
 
@@ -83,5 +87,13 @@ public class Parcelle implements Runnable {
      */
     public int getHumidite() {
         return this.humidite;
+    }
+
+    /**
+     * Modifie le taux d'humidité de la parcelle
+     * @param i
+     */
+    public void setHumidite(int i) {
+        this.humidite = i;
     }
 }

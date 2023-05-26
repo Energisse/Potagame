@@ -28,6 +28,11 @@ public class Modele extends Observable implements Runnable {
     private int argent = 10;
 
     /**
+     * Vitesse du jeu
+     */
+    private int vitesse = 1;
+
+    /**
      * Instance du modèle
      */
     private static Modele instance = null;
@@ -59,9 +64,11 @@ public class Modele extends Observable implements Runnable {
 
     @Override
     public void run() {
-        for (int x = 0; x < largeur; x++){
-            for (int y = 0; y < hauteur; y++){
-                tabParcelles[x][y].run();
+        for(int i = 0; i < vitesse; i++){
+            for (int x = 0; x < largeur; x++){
+                for (int y = 0; y < hauteur; y++){
+                    tabParcelles[x][y].run();
+                }
             }
         }
         setChanged();
@@ -179,9 +186,19 @@ public class Modele extends Observable implements Runnable {
      * @return
      */
     public int getHumidite(int x, int y) {
-        System.out.println(tabParcelles[x][y].getHumidite());
         return tabParcelles[x][y].getHumidite();
     }
+
+    /**
+     * Set la vitesse du jeu
+     * @param vitesse
+     * @return
+     */
+    public void setVitesse(int vitesse) {
+        this.vitesse = vitesse;
+    }
+
+
 }
 
 

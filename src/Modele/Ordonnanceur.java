@@ -7,7 +7,7 @@ public class Ordonnanceur extends Thread {
         while (true) {
             Modele.getInstance().run();
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

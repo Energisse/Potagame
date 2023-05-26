@@ -1,4 +1,7 @@
 package Modele.Legume;
+
+import Modele.Parcelle;
+
 public abstract class Legume {
     /**
      * Croissance du légume
@@ -48,9 +51,16 @@ public abstract class Legume {
      * Fait pousser le légume
      * @return void
      */
-    public void pousser(){
+    public void pousser(Parcelle parcelle){
         if(!aFinitCroissance()){
-            croissance += 10;
+            if(parcelle.getHumidite() > 2){
+                croissance += tauxCroissance;
+                parcelle.setHumidite(parcelle.getHumidite() - 2);
+            }
+        }
+        else{
+            if(parcelle.getHumidite() > 1)
+                parcelle.setHumidite(parcelle.getHumidite() - 1);
         }
     }
 

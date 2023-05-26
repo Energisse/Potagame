@@ -59,14 +59,27 @@ public class Vue extends JFrame implements Observer {
      * @throws IOException
      */
     private void build () throws IOException{
-        setLayout(new OverlayLayout(getContentPane()));
+        //setLayout left to right
+        setLayout(new FlowLayout());
         setTitle("Potagame");
         //Panel principal contenant toutes les parcelles du potager
         JPanel jpn = new JPanel (new GridLayout(Modele.getInstance().getLargeur(),Modele.getInstance().getHauteur()));
-        add(ArgentPanel.getInstance());
-      
 
-        
+        JPanel menu = new JPanel (new GridLayout(2,1));
+        menu.setPreferredSize(new Dimension(200,100));
+
+        JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 10, 1);
+        slider.addChangeListener(e -> Modele.getInstance().setVitesse(slider.getValue()));
+
+        menu.add(slider);
+
+        try{
+            menu.add(ArgentPanel.getInstance());
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
         //Initialisation des parcelles
         for (int x=0; x<Modele.getInstance().getLargeur();x++){
             for(int y=0; y<Modele.getInstance().getHauteur(); y++){
@@ -78,8 +91,10 @@ public class Vue extends JFrame implements Observer {
                 jpn.add(tabParcelles[x][y]);
             }
         }
+
         //Ajout du panel principal à la fenêtre
         add(jpn);
+        add(menu);
         pack();
     }
 
