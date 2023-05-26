@@ -1,16 +1,16 @@
 package Modele.Legume;
 
-public class Tomate extends Legume {
+public class Salade extends Legume {
 
     /**
      * Image du légume
      */
-    public static final String image = "./src/images/Tomate.png";
+    public static final String image = "./src/images/Salade.png";
     
     /**
      * Nom du légume
      */
-    public static final String nom = "Tomate";
+    public static final String nom = "Salade";
 
     /**
      * Prix du légume

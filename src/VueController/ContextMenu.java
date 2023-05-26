@@ -1,34 +1,48 @@
 package VueController;
 
-import Modele.Modele;
-import Modele.Legume.Tomate;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
-public class ContextMenu extends javax.swing.JPopupMenu{
-    public ContextMenu(){
+import Modele.Modele;
+import Modele.Fabrique.FabriqueSalade;
+import Modele.Fabrique.FabriqueTomate;
+
+public class ContextMenu extends JPopupMenu{
+
+    private static ContextMenu instance = null;
+
+    public static ContextMenu getInstance(){
+        if (instance == null){
+            instance = new ContextMenu();
+        }
+        return instance ;
+    }
+    
+    private ContextMenu(){
         super();
 
         /* Menu Planter */
-        javax.swing.JMenuItem item = new javax.swing.JMenuItem("Planter");
-        item.addActionListener(new java.awt.event.ActionListener(){
-            public void actionPerformed(java.awt.event.ActionEvent evt){
-                //recuperer la parcelle
-                Parcelle p = (Parcelle) getInvoker();
-                Modele.getInstance().planter(p.getIndiceX(),p.getIndiceY(),new Tomate());
-            }
-        });
-        add(item);
+        JMenu menu = new JMenu("Planter");
+        //sub menu
+        JMenuItem menuItem1 = new ContextMenuLegume("Tomate",new FabriqueTomate(), this);
+        menu.add(menuItem1);
+        JMenuItem menuItem2 = new ContextMenuLegume("Salade",new FabriqueSalade(), this);
+        menu.add(menuItem2 );
+        add(menu);
 
         /* Menu Récolter */
-        item = new javax.swing.JMenuItem("Récolter");
+        JMenuItem item = new JMenuItem("Récolter");
         item.addActionListener(new java.awt.event.ActionListener(){
             public void actionPerformed(java.awt.event.ActionEvent evt){
-                System.out.println("Récolter");
+                Parcelle p = (Parcelle) getInvoker();
+                Modele.getInstance().recolter(p.getIndiceX(),p.getIndiceY());
             }
         });
         add(item);
 
         /* Menu Arracher */
-        item = new javax.swing.JMenuItem("Arracher");
+        item = new JMenuItem("Arracher");
         item.addActionListener(new java.awt.event.ActionListener(){
             public void actionPerformed(java.awt.event.ActionEvent evt){
                 Parcelle p = (Parcelle) getInvoker();

@@ -18,11 +18,6 @@ public class Vue extends JFrame implements Observer {
     private Parcelle[][] tabParcelles;
 
     /**
-     * Composant Context menu
-     */
-    ContextMenu contextMenu = new ContextMenu();
-    
-    /**
      * Instance de la vue
      */
     private static Vue instance = null; 
@@ -33,7 +28,12 @@ public class Vue extends JFrame implements Observer {
     private Vue(){
         super();
         tabParcelles = new Parcelle[Modele.getInstance().getLargeur()][Modele.getInstance().getLargeur()];
-        build();
+        try {
+            build();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -56,11 +56,16 @@ public class Vue extends JFrame implements Observer {
 
     /**
      * Construit la vue
+     * @throws IOException
      */
-    private void build (){
+    private void build () throws IOException{
+        setLayout(new OverlayLayout(getContentPane()));
         setTitle("Potagame");
         //Panel principal contenant toutes les parcelles du potager
         JPanel jpn = new JPanel (new GridLayout(Modele.getInstance().getLargeur(),Modele.getInstance().getHauteur()));
+        add(ArgentPanel.getInstance());
+      
+
         
         //Initialisation des parcelles
         for (int x=0; x<Modele.getInstance().getLargeur();x++){
@@ -73,20 +78,9 @@ public class Vue extends JFrame implements Observer {
                 jpn.add(tabParcelles[x][y]);
             }
         }
-
         //Ajout du panel principal à la fenêtre
-        setContentPane(jpn);
+        add(jpn);
         pack();
-    }
-
-    /**
-     * Affiche le context menu
-     * @param invoker Parcelle qui a invoqué le context menu
-     * @param x Position x a laquelle afficher le context menu
-     * @param y Position y a laquelle afficher le context menu
-     */
-    public void showContextMenu(Component invoker, int x, int y){
-        contextMenu.show(invoker, x, y);
     }
 
     @Override
@@ -96,6 +90,12 @@ public class Vue extends JFrame implements Observer {
             for (int y = 0; y < Modele.getInstance().getHauteur(); y++) {
                 tabParcelles[x][y].update(o,arg);
             }
+        }
+        try{
+            ArgentPanel.getInstance().update(o,arg);
+        }
+        catch(Exception e){
+            e.printStackTrace();
         }
     }
 }

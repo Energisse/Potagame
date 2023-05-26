@@ -55,10 +55,18 @@ public class Parcelle implements Runnable {
 
     @Override
     public void run() {
-        
         //Si la parcelle contient un légume, on le fait pousser
         if (this.legume != null){
             this.legume.pousser();
         }
     }
+
+    /**
+     * Retourne vrai si le légume contenu dans la parcelle est récoltable
+     * @return
+     */
+    public boolean estRecoltable() {
+        return this.legume != null && this.legume.estRecoltable();
+    }
+
 }

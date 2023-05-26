@@ -3,7 +3,26 @@ public abstract class Legume {
     /**
      * Croissance du légume
      */
-    private float croissance = 0;
+    protected float croissance = 0;
+
+    /**
+     * Taux de croissance du légume
+     * Si les conditions sont mauvaises, le taux de legume reduit jusqu'a 0
+     * Si les conditions sont bonnes, le taux de legume augmente jusqu'a 2
+     */
+    protected float tauxCroissance = 1;
+
+    /**
+     * Vie du légume
+     * @return
+     */
+    protected int vie = 100;
+
+    /**
+     * Retourne le prix du légume
+     * @return int
+     */
+    public abstract int getPrixRevente();
 
     /**
      * Retourne l'image du légume
@@ -42,4 +61,21 @@ public abstract class Legume {
     private boolean aFinitCroissance(){
         return croissance == 100;
     }
+
+    /**
+     * Retourne si le légume est mort
+     * @return boolean
+     */
+    public boolean estMort(){
+        return croissance == 0;
+    }
+
+    /**
+     * Retourne si le légume est récoltable
+     * @return boolean
+     */
+    public boolean estRecoltable(){
+        return aFinitCroissance() && vie > 0;
+    }
+
 }

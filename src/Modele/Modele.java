@@ -1,7 +1,8 @@
 package Modele;
 import java.util.Observable;
 import java.lang.Runnable;
-import java.util.Random;
+
+import Modele.Fabrique.Fabrique;
 import Modele.Legume.Legume;
 
 public class Modele extends Observable implements Runnable {
@@ -20,6 +21,11 @@ public class Modele extends Observable implements Runnable {
      * Liste des parcelles
      */
     private Parcelle [][] tabParcelles = new Parcelle[largeur][hauteur];
+
+    /**
+     * Argent du joueur
+     */
+    private int argent = 10;
 
     /**
      * Instance du modèle
@@ -88,13 +94,20 @@ public class Modele extends Observable implements Runnable {
      * Plante un légume aux coordonnées x et y
      * @param x Coordonnée x
      * @param y Coordonnée y
-     * @param legume a planter
+     * @param Fabrique permettant de planter le légume
      */
-    public void planter(int x, int y, Legume legume) {
-        if(!tabParcelles[x][y].isFree()){
+    public void planter(int x, int y, Fabrique fabrique) {
+        if(!fabrique.peutEtrePlante(getParcelle(x, y))){
             return;
         }
-        tabParcelles[x][y].setLegume(legume);
+
+        if(fabrique.getPrix() > argent){
+            return;
+        }
+
+        argent -= fabrique.getPrix();
+
+        tabParcelles[x][y].setLegume(fabrique.creerLegume());
         setChanged();
         notifyObservers();
     }
@@ -123,6 +136,40 @@ public class Modele extends Observable implements Runnable {
      */
     public int getHauteur() {
         return hauteur;
+    }
+
+    /**
+     * Retourne si la parcelle aux coordonnées x et y est prete à être récoltée
+     * @param x Coordonnée x
+     * @param y Coordonnée y
+     * @return boolean
+     */
+    public boolean estRecoltable(int x, int y) {
+        return tabParcelles[x][y].estRecoltable();
+    }
+
+    /**
+     * Recolte le légume aux coordonnées x et y
+     * @param x Coordonnée x
+     * @param y Coordonnée y
+     */
+    public void recolter(int x, int y) {
+        if(!tabParcelles[x][y].estRecoltable())return;
+
+        argent += tabParcelles[x][y].getLegume().getPrixRevente();
+
+        tabParcelles[x][y].setLegume(null);
+
+        setChanged();
+        notifyObservers();
+    }
+    
+    /**
+     * Retourne l'argent du joueur
+     * @return argent
+     */
+    public int getArgent() {
+        return argent;
     }
 }
 

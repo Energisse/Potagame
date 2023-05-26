@@ -1,6 +1,5 @@
 package VueController;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -8,16 +7,14 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
 import Modele.Modele;
 import Modele.Legume.Legume;
+import Modele.Legume.Salade;
 import Modele.Legume.Tomate;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import java.awt.image.*;
 
 
@@ -64,8 +61,9 @@ public class Parcelle  extends JLayeredPane  implements Observer{
     static {
         imageMap = new HashMap<String, BufferedImage>();
         try {
-            imageMap.put(Tomate.nom,ImageIO.read(new File(Tomate.image)));   
             imageMap.put("Terre",ImageIO.read(new File(terreImageUrl)));
+            imageMap.put(Tomate.nom,ImageIO.read(new File(Tomate.image)));   
+            imageMap.put(Salade.nom,ImageIO.read(new File(Salade.image)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -94,17 +92,7 @@ public class Parcelle  extends JLayeredPane  implements Observer{
 
         //Taille de la parcelle
         this.setPreferredSize(new Dimension( 50, 50));
-
-        //Ajout de l'écouteur de clic droit
-        this.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                //on verifie si click droit
-                if (evt.getButton() == java.awt.event.MouseEvent.BUTTON3) {
-                    //Demande a la vue d'afficher le menu contextuel
-                    Vue.getInstance().showContextMenu(evt.getComponent(), evt.getX(), evt.getY());
-                }
-            }
-        });
+        setComponentPopupMenu(ContextMenu.getInstance());
     }
 
     @Override
@@ -147,5 +135,4 @@ public class Parcelle  extends JLayeredPane  implements Observer{
     public int getIndiceY(){
         return this.indiceY;
     }
-
 }
