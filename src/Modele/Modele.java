@@ -198,7 +198,63 @@ public class Modele extends Observable implements Runnable {
         this.vitesse = vitesse;
     }
 
+    /**
+     * Retourne si la parcelle aux coordonnées x et y a de l'herbe
+     * @param x
+     * @param y
+     * @return
+     */
+    public boolean aDeLHerbe(int x, int y) {
+        return tabParcelles[x][y].aDeLHerbe();
+    }
 
+    /**
+     * Retourne si la parcelle aux coordonnées x et y a un rocher
+     * @param x
+     * @param y
+     * @return
+     */
+    public boolean aUnRocher(int x, int y) {
+        return tabParcelles[x][y].aUnRocher();
+    }
+
+    /**
+     * Mine le rocher aux coordonnées x et y si possible et si le joueur a assez d'argent
+     * @param indiceX
+     * @param indiceY
+     */
+    public void miner(int indiceX, int indiceY) {
+        if(!tabParcelles[indiceX][indiceY].aUnRocher())return;
+
+        if(5 > argent){
+            return;
+        }
+
+        argent -= 5;
+        tabParcelles[indiceX][indiceY].setRocher(false);
+
+        setChanged();
+        notifyObservers();
+    }
+
+    /**
+     * Labourer la parcelle aux coordonnées x et y si possible et si le joueur a assez d'argent
+     * @param indiceX
+     * @param indiceY
+     */
+    public void labourer(int indiceX, int indiceY) {
+        if(!tabParcelles[indiceX][indiceY].aDeLHerbe())return;
+
+        if(5 > argent){
+            return;
+        }
+
+        argent -= 5;
+
+        tabParcelles[indiceX][indiceY].setHerbe(false);
+        setChanged();
+        notifyObservers();
+    }
 }
 
 

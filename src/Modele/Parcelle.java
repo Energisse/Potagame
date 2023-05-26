@@ -24,6 +24,16 @@ public class Parcelle implements Runnable {
     private int humidite;
 
     /**
+     * Est de l'herbe
+     */
+    private boolean herbe;
+
+    /**
+     * A un rocher
+     */
+    private boolean rocher;
+
+    /**
      * Constructeur de la parcelle
      * @param x Coordonnées X
      * @param y Coordonnées Y
@@ -35,6 +45,13 @@ public class Parcelle implements Runnable {
     
         // Initialisation de l'humidité de 0 a 100 de manière aléatoire
         this.humidite = (int) (Math.random() * 100);
+
+        // chance sur 2 d'avoir de l'herbe
+        this.herbe = Math.random() < 0.5;
+
+        // chance sur 2 d'avoir un rocher si de l'herbe
+        if (this.herbe)
+            this.rocher = Math.random() < 0.5;
     }
 
     /**
@@ -71,6 +88,12 @@ public class Parcelle implements Runnable {
         if (this.legume != null){
             this.legume.pousser(this);
         }
+        else{
+            //une chance sur 100_000 de faire d'avoir de l'herbe
+            if (Math.random() < 0.00001){
+                this.herbe = true;
+            }
+        }
     }
 
     /**
@@ -95,5 +118,37 @@ public class Parcelle implements Runnable {
      */
     public void setHumidite(int i) {
         this.humidite = i;
+    }
+
+    /**
+     * Retourne vrai si la parcelle est de l'herbe
+     * @return boolean
+     */
+    public boolean aDeLHerbe() {
+        return this.herbe;
+    }
+
+    /**
+     * Retourne vrai si la parcelle est un rocher
+     * @return boolean
+     */
+    public boolean aUnRocher() {
+        return this.rocher;
+    }
+
+    /**
+     * Modifie le rocher de la parcelle
+     * @param b
+     */
+    public void setRocher(boolean b) {
+        this.rocher = b;
+    }
+
+    /**
+     * Modifie l'herbe de la parcelle
+     * @param b
+     */
+    public void setHerbe(boolean b) {
+        this.herbe = b;
     }
 }

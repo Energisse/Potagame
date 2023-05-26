@@ -31,6 +31,16 @@ public class Parcelle  extends JLayeredPane  implements Observer{
      * ImageIcon de la terre 
      */
     private static BufferedImage terreImage;
+
+    /**
+     * ImageIcon de l'herbe
+     */
+    private static ImageIcon herbeImage;
+
+    /**
+     * ImageIcon du Rocher
+     */
+    private static ImageIcon rocherImage;
     
     /**
      * Indice X de la parcelle
@@ -75,6 +85,9 @@ public class Parcelle  extends JLayeredPane  implements Observer{
         try {
             terreHumideImage = ImageIO.read(new File("./src/images/Terre_humide.png"));
             terreImage = ImageIO.read(new File("./src/images/Terre.png"));
+
+            herbeImage = new ImageIcon(ImageIO.read(new File("./src/images/Herbe.png")).getScaledInstance(TAILLE, TAILLE, java.awt.Image.SCALE_SMOOTH));
+            rocherImage = new ImageIcon(ImageIO.read(new File("./src/images/Rocher.png")).getScaledInstance(TAILLE, TAILLE, java.awt.Image.SCALE_SMOOTH));
             
             imageMap.put(Tomate.nom,ImageIO.read(new File(Tomate.image)));   
             imageMap.put(Salade.nom,ImageIO.read(new File(Salade.image)));
@@ -120,6 +133,44 @@ public class Parcelle  extends JLayeredPane  implements Observer{
      * Met a jour l'image de la parcelle
      */
     private void updateImage(){
+        if(Modele.getInstance().getParcelle(indiceX, indiceY).aDeLHerbe()){
+            this.labelTerre.setIcon(herbeImage);
+            labelTerreHumide.setIcon(null);
+            if(Modele.getInstance().getParcelle(indiceX, indiceY).aUnRocher()){
+                this.labelLegume.setIcon(rocherImage);
+                labelLegume.setBounds(0,0,TAILLE, TAILLE);
+            }
+            else{
+                this.labelLegume.setIcon(null);
+            }
+            return;
+        }
+        else{
+            this.labelTerre.setIcon(new ImageIcon(terreImage.getScaledInstance(TAILLE,TAILLE, java.awt.Image.SCALE_SMOOTH)));
+            this.labelLegume.setIcon(null);
+        }
+
+        //Si la parcelle est modifié on met a jour l'image du legume
+        Legume legume = Modele.getInstance().getLegume(indiceX, indiceY);
+
+        if(legume != null){
+            //Calcul de la taille de l'image en fonction de la croissance du legume
+            int taille = (int)(TAILLE*legume.getCroissance()/100);
+            if(taille < 5)taille = 5;
+
+            //Mise a jour de l'image du legume
+            this.labelLegume.setIcon(new ImageIcon(imageMap.get(legume.getNom()).getScaledInstance(
+                    taille,
+                    taille,
+                    java.awt.Image.SCALE_SMOOTH)));
+            //Positionnement de l'image du legume
+            labelLegume.setBounds((TAILLE/2)-(taille/2),0,TAILLE, TAILLE);
+        }
+        else{
+            this.labelLegume.setIcon(null);
+        }
+
+
          // Créer une nouvelle BufferedImage avec un type d'image compatible avec la transparence (TYPE_INT_ARGB)
          BufferedImage transparentImage = new BufferedImage(
             terreHumideImage.getWidth(), terreHumideImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -141,26 +192,6 @@ public class Parcelle  extends JLayeredPane  implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {
-
-        //Si la parcelle est modifié on met a jour l'image du legume
-        Legume legume = Modele.getInstance().getLegume(indiceX, indiceY);
-
-        if(legume != null){
-            //Calcul de la taille de l'image en fonction de la croissance du legume
-            int taille = (int)(TAILLE*legume.getCroissance()/100);
-            if(taille < 5)taille = 5;
-
-            //Mise a jour de l'image du legume
-            this.labelLegume.setIcon(new ImageIcon(imageMap.get(legume.getNom()).getScaledInstance(
-                taille, 
-                taille, 
-                java.awt.Image.SCALE_SMOOTH)));
-            //Positionnement de l'image du legume
-            labelLegume.setBounds((TAILLE/2)-(taille/2),0,TAILLE, TAILLE);
-        }
-        else{
-            this.labelLegume.setIcon(null);
-        }
         updateImage();
     }
 
