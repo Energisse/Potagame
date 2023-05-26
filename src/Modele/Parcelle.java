@@ -19,6 +19,11 @@ public class Parcelle implements Runnable {
     private Legume legume;
 
     /**
+     * Taux d'humidité de la parcelle
+     */
+    private int humidite;
+
+    /**
      * Constructeur de la parcelle
      * @param x Coordonnées X
      * @param y Coordonnées Y
@@ -27,6 +32,9 @@ public class Parcelle implements Runnable {
         this.x = x;
         this.y = y;
         this.legume = null;
+    
+        // Initialisation de l'humidité de 0 a 100 de manière aléatoire
+        this.humidite = (int) (Math.random() * 100);
     }
 
     /**
@@ -69,4 +77,11 @@ public class Parcelle implements Runnable {
         return this.legume != null && this.legume.estRecoltable();
     }
 
+    /**
+     * Retourne le taux d'humidité de la parcelle
+     * @return int
+     */
+    public int getHumidite() {
+        return this.humidite;
+    }
 }

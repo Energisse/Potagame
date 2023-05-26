@@ -171,6 +171,17 @@ public class Modele extends Observable implements Runnable {
     public int getArgent() {
         return argent;
     }
+    
+    /**
+     * Retourne l'humidité de la parcelle aux coordonnées x et y
+     * @param x
+     * @param y
+     * @return
+     */
+    public int getHumidite(int x, int y) {
+        System.out.println(tabParcelles[x][y].getHumidite());
+        return tabParcelles[x][y].getHumidite();
+    }
 }
 
 
