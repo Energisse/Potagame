@@ -127,6 +127,14 @@ public class Parcelle  extends JLayeredPane  implements Observer{
         //Taille de la parcelle
         this.setPreferredSize(new Dimension( 50, 50));
         setComponentPopupMenu(ContextMenu.getInstance());
+
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if(evt.getButton() == java.awt.event.MouseEvent.BUTTON1){
+                    Modele.getInstance().recolter(indiceX, indiceY);
+                }
+            }
+        });
     }
 
     /**
