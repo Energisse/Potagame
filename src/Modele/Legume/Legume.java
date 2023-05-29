@@ -53,6 +53,11 @@ public abstract class Legume {
     private float tauxBrulure = 0;
 
     /**
+     *  tauxMaladie du légume de 0 a 1
+     */
+    private float tauxMaladie = 0;
+
+    /**
      * Fait pousser le légume
      * @return void
      */
@@ -68,8 +73,8 @@ public abstract class Legume {
                 parcelle.setHumidite(parcelle.getHumidite() - 1);
             }
             //a augmenter en fonction de la météo
-            tauxBrulure += 0.001;
-            if(tauxBrulure > 1) tauxBrulure = 1;
+            tauxMaladie += 0.001;
+            if(tauxMaladie > 1) tauxMaladie = 1;
 
         }
     }
@@ -104,5 +109,12 @@ public abstract class Legume {
      */
     public float getTauxBrulure() {
         return tauxBrulure;
+    }
+
+    /**
+     * @return
+     */
+    public float getTauxMaladie() {
+        return tauxMaladie;
     }
 }

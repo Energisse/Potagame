@@ -266,6 +266,15 @@ public class Modele extends Observable implements Runnable {
         return tabParcelles[x][y].getLegume().getTauxBrulure();
     }
 
+    /**
+     * Retourne le taux de maladie du legume aux coordonnées x et y
+     * @param x
+     * @param y
+     * @return
+     */
+    public float getTauxMaladie(int x, int y) {
+        return tabParcelles[x][y].getLegume().getTauxMaladie();
+    }
 }
 
 

@@ -83,6 +83,7 @@ public class Parcelle  extends JLayeredPane  implements Observer{
             rocherImage = new ImageIcon(ImageIO.read(new File("./src/images/Rocher.png")).getScaledInstance(TAILLE, TAILLE, java.awt.Image.SCALE_SMOOTH));
 
             imageMap.put("crame",ImageIO.read(new File("./src/images/Crame.png")));
+            imageMap.put("pourriture",ImageIO.read(new File("./src/images/Pourriture.png")));
             imageMap.put(Tomate.nom,ImageIO.read(new File(Tomate.image)));
             imageMap.put(Salade.nom,ImageIO.read(new File(Salade.image)));
         } catch (IOException e) {
@@ -150,12 +151,27 @@ public class Parcelle  extends JLayeredPane  implements Observer{
             int taille = (int)(TAILLE*legume.getCroissance()/100);
             if(taille < 5)taille = 5;
 
-
-            labelLegume.setIcon(new ImageIcon(intersectionImage(
-                    imageMap.get(legume.getNom()),
-                    imageMap.get("crame"),
-                    Modele.getInstance().getTauxBrulure(indiceX,indiceY)
-            ).getScaledInstance(taille,taille, java.awt.Image.SCALE_SMOOTH)));
+            //On met a jour l'image du legume
+            //Si le legume est malade on met a jour l'image en fonction de la maladie
+            if(Modele.getInstance().getTauxMaladie(indiceX, indiceY) > 0){
+                labelLegume.setIcon(new ImageIcon(intersectionImage(
+                        imageMap.get(legume.getNom()),
+                        imageMap.get("pourriture"),
+                        Modele.getInstance().getTauxMaladie(indiceX,indiceY)
+                ).getScaledInstance(taille,taille, java.awt.Image.SCALE_SMOOTH)));
+            }
+            //Si le legume est brulé on met a jour l'image en fonction du taux de brulure
+            else if(Modele.getInstance().getTauxBrulure(indiceX, indiceY) > 0){
+                labelLegume.setIcon(new ImageIcon(intersectionImage(
+                        imageMap.get(legume.getNom()),
+                        imageMap.get("crame"),
+                        Modele.getInstance().getTauxBrulure(indiceX,indiceY)
+                ).getScaledInstance(taille,taille, java.awt.Image.SCALE_SMOOTH)));
+            }
+            //Sinon on met a jour l'image du legume
+            else{
+                labelLegume.setIcon(new ImageIcon(imageMap.get(legume.getNom()).getScaledInstance(taille,taille, java.awt.Image.SCALE_SMOOTH)));
+            }
 
             //Positionnement de l'image du legume
             labelLegume.setBounds((TAILLE/2)-(taille/2),0,TAILLE, TAILLE);
