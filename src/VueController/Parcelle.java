@@ -1,12 +1,10 @@
 package VueController;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
-import java.awt.AlphaComposite;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -58,11 +56,6 @@ public class Parcelle  extends JLayeredPane  implements Observer{
     private JLabel labelTerre;
 
     /**
-     * Label contenant l'image de la terre humide
-     */
-    private JLabel labelTerreHumide;
-    
-    /**
      * Label contenant l'image du legume
      */
     private JLabel labelLegume;
@@ -88,8 +81,9 @@ public class Parcelle  extends JLayeredPane  implements Observer{
 
             herbeImage = new ImageIcon(ImageIO.read(new File("./src/images/Herbe.png")).getScaledInstance(TAILLE, TAILLE, java.awt.Image.SCALE_SMOOTH));
             rocherImage = new ImageIcon(ImageIO.read(new File("./src/images/Rocher.png")).getScaledInstance(TAILLE, TAILLE, java.awt.Image.SCALE_SMOOTH));
-            
-            imageMap.put(Tomate.nom,ImageIO.read(new File(Tomate.image)));   
+
+            imageMap.put("crame",ImageIO.read(new File("./src/images/Crame.png")));
+            imageMap.put(Tomate.nom,ImageIO.read(new File(Tomate.image)));
             imageMap.put(Salade.nom,ImageIO.read(new File(Salade.image)));
         } catch (IOException e) {
             e.printStackTrace();
@@ -108,19 +102,14 @@ public class Parcelle  extends JLayeredPane  implements Observer{
         this.indiceY = indiceY;
 
         //Création du label du fond correspondant à la terre
-        labelTerre = new JLabel(new ImageIcon(terreImage.getScaledInstance(TAILLE,TAILLE, java.awt.Image.SCALE_SMOOTH)));
+        labelTerre = new JLabel();
 
-        //Création du label du fond correspondant à la terre humide
-        labelTerreHumide = new JLabel();
-        
         //Création du label du legume
         labelLegume = new JLabel();
 
         labelTerre.setBounds(0, 0,TAILLE, TAILLE);
-        labelTerreHumide.setBounds(0, 0,TAILLE, TAILLE);
         //change opacity of labelTerreHumide
 
-        this.add(labelTerreHumide, JLayeredPane.DEFAULT_LAYER);
         this.add(labelTerre, JLayeredPane.DEFAULT_LAYER);
         this.add(labelLegume, JLayeredPane.PALETTE_LAYER);
         updateImage();
@@ -143,7 +132,6 @@ public class Parcelle  extends JLayeredPane  implements Observer{
     private void updateImage(){
         if(Modele.getInstance().getParcelle(indiceX, indiceY).aDeLHerbe()){
             this.labelTerre.setIcon(herbeImage);
-            labelTerreHumide.setIcon(null);
             if(Modele.getInstance().getParcelle(indiceX, indiceY).aUnRocher()){
                 this.labelLegume.setIcon(rocherImage);
                 labelLegume.setBounds(0,0,TAILLE, TAILLE);
@@ -152,10 +140,6 @@ public class Parcelle  extends JLayeredPane  implements Observer{
                 this.labelLegume.setIcon(null);
             }
             return;
-        }
-        else{
-            this.labelTerre.setIcon(new ImageIcon(terreImage.getScaledInstance(TAILLE,TAILLE, java.awt.Image.SCALE_SMOOTH)));
-            this.labelLegume.setIcon(null);
         }
 
         //Si la parcelle est modifié on met a jour l'image du legume
@@ -166,11 +150,13 @@ public class Parcelle  extends JLayeredPane  implements Observer{
             int taille = (int)(TAILLE*legume.getCroissance()/100);
             if(taille < 5)taille = 5;
 
-            //Mise a jour de l'image du legume
-            this.labelLegume.setIcon(new ImageIcon(imageMap.get(legume.getNom()).getScaledInstance(
-                    taille,
-                    taille,
-                    java.awt.Image.SCALE_SMOOTH)));
+
+            labelLegume.setIcon(new ImageIcon(intersectionImage(
+                    imageMap.get(legume.getNom()),
+                    imageMap.get("crame"),
+                    Modele.getInstance().getTauxBrulure(indiceX,indiceY)
+            ).getScaledInstance(taille,taille, java.awt.Image.SCALE_SMOOTH)));
+
             //Positionnement de l'image du legume
             labelLegume.setBounds((TAILLE/2)-(taille/2),0,TAILLE, TAILLE);
         }
@@ -178,24 +164,7 @@ public class Parcelle  extends JLayeredPane  implements Observer{
             this.labelLegume.setIcon(null);
         }
 
-
-         // Créer une nouvelle BufferedImage avec un type d'image compatible avec la transparence (TYPE_INT_ARGB)
-         BufferedImage transparentImage = new BufferedImage(
-            terreHumideImage.getWidth(), terreHumideImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
-
-        // Obtenir le contexte graphique de l'image transparente
-        Graphics2D g2d = transparentImage.createGraphics();
-
-        // Activer la transparence
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, Modele.getInstance().getHumidite(indiceX,indiceY) / 100f));
-
-        // Dessiner l'image source sur l'image transparente
-        g2d.drawImage(terreHumideImage, 0, 0, null);
-
-        // Libérer les ressources graphiques
-        g2d.dispose();
-
-        labelTerreHumide.setIcon(new ImageIcon(transparentImage.getScaledInstance(TAILLE,TAILLE, java.awt.Image.SCALE_SMOOTH)));
+        labelTerre.setIcon(new ImageIcon(superpossitionImage(terreImage,terreHumideImage,Modele.getInstance().getHumidite(indiceX,indiceY) / 100f).getScaledInstance(TAILLE,TAILLE, java.awt.Image.SCALE_SMOOTH)));
     }
 
     @Override
@@ -219,5 +188,68 @@ public class Parcelle  extends JLayeredPane  implements Observer{
      */
     public int getIndiceY(){
         return this.indiceY;
+    }
+
+
+    /**
+     * Superpose deux images
+     * @param source Image de fond
+     * @param superposition Image a superposer
+     * @param alpha Opacité de l'image a superposer
+     * @return
+     */
+    private BufferedImage superpossitionImage(BufferedImage source, BufferedImage superposition,float alpha ){
+        // Créer une nouvelle BufferedImage avec un type d'image compatible avec la transparence (TYPE_INT_ARGB)
+        BufferedImage sortie = new BufferedImage(
+                source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+        // Obtenir le contexte graphique de l'image transparente
+        Graphics2D g2d = sortie.createGraphics();
+
+        // Dessiner l'image source sur l'image transparente
+        g2d.drawImage(source, 0, 0, null);
+
+        // Activer la transparence
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+
+        // Dessiner l'image source sur l'image transparente
+        g2d.drawImage(superposition, 0, 0, null);
+
+        // Libérer les ressources graphiques
+        g2d.dispose();
+
+        return  sortie;
+    }
+
+    /**
+     * Intersection de deux images
+     * @param source Image de fond
+     * @param intersection Image a superposer
+     * @param alpha Opacité de l'image a superposer
+     * @return
+     */
+    private BufferedImage intersectionImage(BufferedImage source, BufferedImage intersection,float alpha){
+
+        //Etape 1 : Detoure l'image intersection avec la source en effecant un SRV_IN
+        //Etape 2 : Superpose l'image source avec l'image intersection
+
+        // Créer une nouvelle BufferedImage avec un type d'image compatible avec la transparence (TYPE_INT_ARGB)
+        BufferedImage sortie = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+        // Obtenir le contexte graphique de l'image transparente
+        Graphics2D g2d = sortie.createGraphics();
+
+        // Dessiner l'image source sur l'image transparente
+        g2d.drawImage(source, 0, 0, null);
+
+        //active la transparence en multiplication
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_IN)    );
+
+        g2d.drawImage(intersection, 0, 0, null);
+
+        // Libérer les ressources graphiques
+        g2d.dispose();
+
+        return superpossitionImage(sortie,source,1-alpha);
     }
 }

@@ -48,6 +48,11 @@ public abstract class Legume {
     }
 
     /**
+     * Taux de brullure du légume de 0 a 1
+     */
+    private float tauxBrulure = 0;
+
+    /**
      * Fait pousser le légume
      * @return void
      */
@@ -59,8 +64,13 @@ public abstract class Legume {
             }
         }
         else{
-            if(parcelle.getHumidite() > 1)
+            if(parcelle.getHumidite() > 1){
                 parcelle.setHumidite(parcelle.getHumidite() - 1);
+            }
+            //a augmenter en fonction de la météo
+            tauxBrulure += 0.001;
+            if(tauxBrulure > 1) tauxBrulure = 1;
+
         }
     }
 
@@ -88,4 +98,11 @@ public abstract class Legume {
         return aFinitCroissance() && vie > 0;
     }
 
+    /**
+     * Retourne le taux de brullure du légume
+     * @return float
+     */
+    public float getTauxBrulure() {
+        return tauxBrulure;
+    }
 }

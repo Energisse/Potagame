@@ -255,6 +255,17 @@ public class Modele extends Observable implements Runnable {
         setChanged();
         notifyObservers();
     }
+
+    /**
+     * Retourne le taux de brullure du legume aux coordonnées x et y
+     * @param x
+     * @param y
+     * @return
+     */
+    public float getTauxBrulure(int x, int y) {
+        return tabParcelles[x][y].getLegume().getTauxBrulure();
+    }
+
 }
 
 
