@@ -71,6 +71,22 @@ public class Parcelle  extends JLayeredPane  implements Observer{
     private static HashMap<String, BufferedImage> imageMap;
 
     /**
+     * Etat de l'herbe
+     */
+    enum EtatHerbe {
+        NON_HERBE,
+        HERBE,
+        HERBE_FLEURE1,
+        HERBE_FLEURE2,
+        HERBE_FLEURE3,
+    }
+
+    /**
+     * Etat de l'herbe
+     */
+    private EtatHerbe lastEtatHerbe = EtatHerbe.NON_HERBE;
+
+    /**
      * Initialisation de la map d'image
      */
     static {
@@ -84,6 +100,9 @@ public class Parcelle  extends JLayeredPane  implements Observer{
 
             imageMap.put("crame",ImageIO.read(new File("./src/images/Crame.png")));
             imageMap.put("pourriture",ImageIO.read(new File("./src/images/Pourriture.png")));
+            imageMap.put("herbeFleure1",ImageIO.read(new File("./src/images/Herbe_fleure1.png")));
+            imageMap.put("herbeFleure2",ImageIO.read(new File("./src/images/Herbe_fleure2.png")));
+            imageMap.put("herbeFleure3",ImageIO.read(new File("./src/images/Herbe_fleure3.png")));
             imageMap.put(Tomate.nom,ImageIO.read(new File(Tomate.image)));
             imageMap.put(Salade.nom,ImageIO.read(new File(Salade.image)));
         } catch (IOException e) {
@@ -113,10 +132,12 @@ public class Parcelle  extends JLayeredPane  implements Observer{
 
         this.add(labelTerre, JLayeredPane.DEFAULT_LAYER);
         this.add(labelLegume, JLayeredPane.PALETTE_LAYER);
-        updateImage();
         //Taille de la parcelle
         this.setPreferredSize(new Dimension( 50, 50));
         setComponentPopupMenu(ContextMenu.getInstance());
+
+
+        updateImage();
 
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -131,8 +152,22 @@ public class Parcelle  extends JLayeredPane  implements Observer{
      * Met a jour l'image de la parcelle
      */
     private void updateImage(){
+        //Ajoute l'image de l'herbe
         if(Modele.getInstance().getParcelle(indiceX, indiceY).aDeLHerbe()){
-            this.labelTerre.setIcon(herbeImage);
+            switch (this.lastEtatHerbe){
+                case HERBE:
+                    this.labelTerre.setIcon(herbeImage);
+                    break;
+                case HERBE_FLEURE1:
+                    this.labelTerre.setIcon(new ImageIcon(imageMap.get("herbeFleure1").getScaledInstance(TAILLE, TAILLE, java.awt.Image.SCALE_SMOOTH)));
+                    break;
+                case HERBE_FLEURE2:
+                    this.labelTerre.setIcon(new ImageIcon(imageMap.get("herbeFleure2").getScaledInstance(TAILLE, TAILLE, java.awt.Image.SCALE_SMOOTH)));
+                    break;
+                case HERBE_FLEURE3:
+                    this.labelTerre.setIcon(new ImageIcon(imageMap.get("herbeFleure3").getScaledInstance(TAILLE, TAILLE, java.awt.Image.SCALE_SMOOTH)));
+                    break;
+            }
             if(Modele.getInstance().getParcelle(indiceX, indiceY).aUnRocher()){
                 this.labelLegume.setIcon(rocherImage);
                 labelLegume.setBounds(0,0,TAILLE, TAILLE);
@@ -185,6 +220,29 @@ public class Parcelle  extends JLayeredPane  implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {
+        //detecte un changement d'etat de l'herbe
+        if(Modele.getInstance().aDeLHerbe(indiceX,indiceY)){
+            if(lastEtatHerbe == EtatHerbe.NON_HERBE){
+                lastEtatHerbe = EtatHerbe.HERBE;
+                if(!Modele.getInstance().aUnRocher(indiceX,indiceY)) {
+                    int rand = (int) Math.floor(Math.random() * 10);
+                    switch (rand) {
+                        case 0:
+                            lastEtatHerbe = EtatHerbe.HERBE_FLEURE1;
+                            break;
+                        case 1:
+                            lastEtatHerbe = EtatHerbe.HERBE_FLEURE2;
+                            break;
+                        case 2:
+                            lastEtatHerbe = EtatHerbe.HERBE_FLEURE3;
+                            break;
+                    }
+                }
+            }
+        }
+        else{
+            lastEtatHerbe = EtatHerbe.NON_HERBE;
+        }
         updateImage();
     }
 
