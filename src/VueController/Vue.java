@@ -23,6 +23,8 @@ public class Vue extends JFrame implements Observer {
      */
     private static Vue instance = null; 
 
+    private Mouettes mouettes = new Mouettes();
+
     /**
      * Constructeur de la vue
      */
@@ -60,48 +62,60 @@ public class Vue extends JFrame implements Observer {
      * Construit la vue
      * @throws IOException
      */
-    private void build () throws IOException{
-        //setLayout left to right
+    private void build() throws IOException {
+        // setLayout left to right
         setLayout(new FlowLayout());
-        setTitle("Potagame");
-        //Panel principal contenant toutes les parcelles du potager
-        JPanel jpn = new JPanel(new GridLayout(Modele.getInstance().getLargeur(),Modele.getInstance().getHauteur()));
 
-        JPanel menu = new JPanel(new GridLayout(2,1));
-        menu.setPreferredSize(new Dimension(200,100));
+        setTitle("Potagame");
+        //Contient les parcelles + les mouettes
+        JLayeredPane parcellesContainer = new JLayeredPane();
+        //contient les parcelles
+        JPanel parcelles = new JPanel(new GridLayout(Modele.getInstance().getLargeur(), Modele.getInstance().getHauteur()));
+        parcellesContainer.add(parcelles);
+
+        JPanel menu = new JPanel(new GridLayout(2, 1));
+        menu.setPreferredSize(new Dimension(200, 100));
 
         JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 10, 1);
         slider.addChangeListener(e -> Modele.getInstance().setVitesse(slider.getValue()));
 
         menu.add(slider);
 
-        try{
+        try {
             menu.add(ArgentPanel.getInstance());
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        //Initialisation des parcelles
-        for (int x=0; x<Modele.getInstance().getLargeur();x++){
-            for(int y=0; y<Modele.getInstance().getHauteur(); y++){
+        // Initialisation des parcelles
+        for (int x = 0; x < Modele.getInstance().getLargeur(); x++) {
+            for (int y = 0; y < Modele.getInstance().getHauteur(); y++) {
                 try {
-                    tabParcelles[x][y]= new Parcelle(x,y);
+                    tabParcelles[x][y] = new Parcelle(x, y);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                jpn.add(tabParcelles[x][y]);
+                parcelles.add(tabParcelles[x][y]);
             }
         }
 
-        //Ajout du panel principal à la fenêtre
-        add(jpn);
+        parcelles.setBounds(0, 0, Parcelle.TAILLE * Modele.getInstance().getLargeur(), Parcelle.TAILLE * Modele.getInstance().getHauteur());
+        mouettes.setBounds(0, 0, Parcelle.TAILLE * Modele.getInstance().getLargeur(), Parcelle.TAILLE * Modele.getInstance().getHauteur());
+        parcellesContainer.setPreferredSize( new Dimension(Parcelle.TAILLE * Modele.getInstance().getLargeur(), Parcelle.TAILLE * Modele.getInstance().getHauteur()));
+
+        // Ajout de la mouette au LayeredPane
+        parcellesContainer.add(mouettes, Integer.valueOf(2));
+
+        // Ajout des composants à la fenêtre
+        add(parcellesContainer);
         add(menu);
         pack();
     }
 
     @Override
     public void update(Observable o, Object arg) {
+        mouettes.update(o, arg);
+
         //update every parcelle
         for (int x=0; x< Modele.getInstance().getLargeur(); x++) {
             for (int y = 0; y < Modele.getInstance().getHauteur(); y++) {

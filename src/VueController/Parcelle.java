@@ -64,7 +64,7 @@ public class Parcelle  extends JLayeredPane  implements Observer{
     /**
      * Taille de la parcelle
      */
-    private static final int TAILLE = 50; 
+    public static final int TAILLE = 50;
 
     /**
      * Map de toutes les images possible contenue dans la parcelle
@@ -152,10 +152,16 @@ public class Parcelle  extends JLayeredPane  implements Observer{
                 }
             }
 
+            /**
+             * Change la bordure de la parcelle quand la souris est dessus
+             */
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 bordure.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
             }
 
+            /**
+             * Change la bordure de la parcelle quand la souris n'est plus dessus
+             */
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 bordure.setBorder(null);
             }

@@ -1,9 +1,12 @@
 package Modele;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.io.Serializable;
 import java.lang.Runnable;
 import Modele.Fabrique.Fabrique;
 import Modele.Legume.Legume;
+import Modele.Mouette.GestionaireMouette;
+import Modele.Mouette.Mouette;
 
 public class Modele extends Observable implements Runnable, Serializable {
 
@@ -11,7 +14,7 @@ public class Modele extends Observable implements Runnable, Serializable {
      * Largeur du potager
      */
     public int largeur =10;
-    
+
     /**
      * Hauteur du potager
      */
@@ -36,7 +39,7 @@ public class Modele extends Observable implements Runnable, Serializable {
      * Instance du modèle
      */
     private static Modele instance = null;
-    
+
     /**
      * Constructeur du modèle
      */
@@ -74,6 +77,8 @@ public class Modele extends Observable implements Runnable, Serializable {
     @Override
     public void run() {
         for(int i = 0; i < vitesse; i++){
+            GestionaireMouette.getInstance().run();
+
             for (int x = 0; x < largeur; x++){
                 for (int y = 0; y < hauteur; y++){
                     tabParcelles[x][y].run();
@@ -83,7 +88,7 @@ public class Modele extends Observable implements Runnable, Serializable {
         setChanged();
         notifyObservers();
     }
-    
+
     /**
      * Retourne la parcelle aux coordonnées x et y
      * @param x Coordonnée x
@@ -179,7 +184,7 @@ public class Modele extends Observable implements Runnable, Serializable {
         setChanged();
         notifyObservers();
     }
-    
+
     /**
      * Retourne l'argent du joueur
      * @return argent
@@ -187,7 +192,7 @@ public class Modele extends Observable implements Runnable, Serializable {
     public int getArgent() {
         return argent;
     }
-    
+
     /**
      * Retourne l'humidité de la parcelle aux coordonnées x et y
      * @param x
@@ -284,6 +289,15 @@ public class Modele extends Observable implements Runnable, Serializable {
     public float getTauxMaladie(int x, int y) {
         return tabParcelles[x][y].getLegume().getTauxMaladie();
     }
+
+    /**
+     * get mouettes
+     */
+    public ArrayList<Mouette> getMouettes() {
+        return GestionaireMouette.getInstance().getMouettes();
+    }
+
+
 }
 
 
