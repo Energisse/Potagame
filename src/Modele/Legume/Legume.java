@@ -1,8 +1,10 @@
 package Modele.Legume;
 
+import java.io.Serializable;
+
 import Modele.Parcelle;
 
-public abstract class Legume {
+public abstract class Legume implements Serializable{
     /**
      * Croissance du légume
      */

@@ -1,11 +1,11 @@
 package Modele;
 import java.util.Observable;
+import java.io.Serializable;
 import java.lang.Runnable;
-
 import Modele.Fabrique.Fabrique;
 import Modele.Legume.Legume;
 
-public class Modele extends Observable implements Runnable {
+public class Modele extends Observable implements Runnable, Serializable {
 
     /**
      * Largeur du potager
@@ -36,7 +36,7 @@ public class Modele extends Observable implements Runnable {
      * Instance du modèle
      */
     private static Modele instance = null;
-
+    
     /**
      * Constructeur du modèle
      */
@@ -60,6 +60,15 @@ public class Modele extends Observable implements Runnable {
             instance = new Modele();
         }
         return instance;
+    }
+
+
+    /**
+     * Modifie l'instance du modèle
+     * @param newInstance
+     */
+    public static void setInstance(Modele newInstance) {
+        instance = newInstance;
     }
 
     @Override

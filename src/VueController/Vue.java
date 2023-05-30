@@ -2,6 +2,7 @@ package VueController;
 import javax.swing.*;
 
 import Modele.Modele;
+import Modele.Sauvegarde;
 
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -37,7 +38,8 @@ public class Vue extends JFrame implements Observer {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                super.windowClosing(e);
+                //super.windowClosing(e);
+                Sauvegarde.sauvegarder();
                 System.exit(0);
             }
         });
@@ -63,9 +65,9 @@ public class Vue extends JFrame implements Observer {
         setLayout(new FlowLayout());
         setTitle("Potagame");
         //Panel principal contenant toutes les parcelles du potager
-        JPanel jpn = new JPanel (new GridLayout(Modele.getInstance().getLargeur(),Modele.getInstance().getHauteur()));
+        JPanel jpn = new JPanel(new GridLayout(Modele.getInstance().getLargeur(),Modele.getInstance().getHauteur()));
 
-        JPanel menu = new JPanel (new GridLayout(2,1));
+        JPanel menu = new JPanel(new GridLayout(2,1));
         menu.setPreferredSize(new Dimension(200,100));
 
         JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 10, 1);

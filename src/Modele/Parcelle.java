@@ -1,8 +1,10 @@
 package Modele;
 
+import java.io.Serializable;
+
 import Modele.Legume.Legume;
 
-public class Parcelle implements Runnable {
+public class Parcelle implements Runnable, Serializable {
 
     /**
      * Coordonnées X de la parcelle
