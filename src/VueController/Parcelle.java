@@ -7,6 +7,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -132,10 +133,15 @@ public class Parcelle  extends JLayeredPane  implements Observer{
 
         this.add(labelTerre, JLayeredPane.DEFAULT_LAYER);
         this.add(labelLegume, JLayeredPane.PALETTE_LAYER);
+
+        JLabel bordure = new JLabel(); 
+
+        this.add(bordure, JLayeredPane.POPUP_LAYER);
+        bordure.setBounds(0, 0,TAILLE, TAILLE);
+
         //Taille de la parcelle
         this.setPreferredSize(new Dimension( 50, 50));
         setComponentPopupMenu(ContextMenu.getInstance());
-
 
         updateImage();
 
@@ -144,6 +150,14 @@ public class Parcelle  extends JLayeredPane  implements Observer{
                 if(evt.getButton() == java.awt.event.MouseEvent.BUTTON1){
                     Modele.getInstance().recolter(indiceX, indiceY);
                 }
+            }
+
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                bordure.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                bordure.setBorder(null);
             }
         });
     }
