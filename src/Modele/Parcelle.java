@@ -42,15 +42,20 @@ public class Parcelle implements Runnable, Serializable {
     private Objet objet;
 
     /**
+     * Nombre d'epouvantails
+     */
+    private int nbEpouvantail;
+
+    /**
      * Constructeur de la parcelle
      * @param x Coordonnées X
      * @param y Coordonnées Y
      */
-    public Parcelle(int x, int y){
+    public Parcelle(int x, int y) {
         this.x = x;
         this.y = y;
         this.legume = null;
-    
+
         // Initialisation de l'humidité de 0 a 100 de manière aléatoire
         this.humidite = (int) (Math.random() * 100);
 
@@ -64,9 +69,9 @@ public class Parcelle implements Runnable, Serializable {
 
     /**
      * Plante un légume dans la parcelle
-     * @param legume
+     * @param legume Legume à planter
      */
-    public void setLegume(Legume legume){
+    public void setLegume(Legume legume) {
         this.legume = legume;
     }
 
@@ -85,12 +90,11 @@ public class Parcelle implements Runnable, Serializable {
         if (this.humidite > 100) this.humidite = 100;
 
         //Si la parcelle contient un légume, on le fait pousser
-        if (this.legume != null){
+        if (this.legume != null) {
             this.legume.pousser(this);
-        }
-        else{
+        } else {
             //une chance sur 100_000 de faire d'avoir de l'herbe
-            if (Math.random() < 0.00001){
+            if (Math.random() < 0.00001) {
                 this.herbe = true;
             }
         }
@@ -165,6 +169,42 @@ public class Parcelle implements Runnable, Serializable {
      * @param objet Objet a mettre dans la parcelle
      */
     public void setObjet(Objet objet) {
+        if(this.objet != null){
+            this.objet.enlever();
+        }
         this.objet = objet;
     }
+
+    /**
+     * Retourne les coordonnées X de la parcelle
+     * @return int
+     */
+    public int getX() {
+        return this.x;
+    }
+
+    /**
+     * Retourne les coordonnées Y de la parcelle
+     * @return int
+     */
+    public int getY() {
+        return this.y;
+    }
+
+    /**
+     * Retourne le nombre d'epouvantails
+     * @return int
+     */
+    public int getNbEpouvantail() {
+        	return this.nbEpouvantail;
+    }
+
+    /**
+     * Modifie le nombre d'epouvantails
+     * @param nbEpouvantails Nombre d'epouvantails
+     */
+    public void setNbEpouvantail(int nbEpouvantails) {
+        this.nbEpouvantail = nbEpouvantails;
+    }
+
 }

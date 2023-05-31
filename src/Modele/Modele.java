@@ -133,11 +133,11 @@ public class Modele extends Observable implements Runnable, Serializable {
 
 
         if(fabrique instanceof  FabriqueLegume fabriqueLegume) {
-            tabParcelles[x][y].setLegume(fabriqueLegume.creer());
+            tabParcelles[x][y].setLegume(fabriqueLegume.creer(getParcelle(x, y)));
 
         }
         else if (fabrique instanceof  FabriqueObjet fabriqueObjet){
-            tabParcelles[x][y].setObjet(fabriqueObjet.creer());
+            tabParcelles[x][y].setObjet(fabriqueObjet.creer(getParcelle(x, y)));
         }
 
         setChanged();
@@ -336,6 +336,16 @@ public class Modele extends Observable implements Runnable, Serializable {
      */
     public void enleverObjet(int indiceX, int indiceY) {
         tabParcelles[indiceX][indiceY].setObjet(null);
+    }
+
+    /**
+     * Retourne si la parcelle aux coordonnées x et y a un objet
+     * @param indiceX Coordonnée x
+     * @param indiceY Coordonnée y
+     * @return boolean
+     */
+    public int getNbEpouvantail(int indiceX, int indiceY) {
+        return tabParcelles[indiceX][indiceY].getNbEpouvantail();
     }
 }
 

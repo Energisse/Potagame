@@ -7,10 +7,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
+import javax.swing.*;
 
 import Modele.Modele;
 import Modele.Legume.Legume;
@@ -45,6 +42,11 @@ public class Parcelle  extends JLayeredPane  implements Observer{
      * Label contenant l'objet
      */
     private final JLabel labelObjet;
+
+    /**
+     * Label contenant la bordure d'action de l'epouvantail
+     */
+    private final JLabel labelBordureEpouvantail;
     
     /**
      * Taille de la parcelle
@@ -124,16 +126,19 @@ public class Parcelle  extends JLayeredPane  implements Observer{
         this.add(labelLegume, JLayeredPane.PALETTE_LAYER);
         this.add(labelObjet, JLayeredPane.POPUP_LAYER);
 
-        JLabel bordure = new JLabel(); 
+        labelBordureEpouvantail = new JLabel();
+        labelBordureEpouvantail.setBounds(0, 0,TAILLE, TAILLE);
 
-        this.add(bordure, JLayeredPane.POPUP_LAYER);
-        bordure.setBounds(0, 0,TAILLE, TAILLE);
+        this.add(labelBordureEpouvantail, JLayeredPane.POPUP_LAYER);
+
+        JLabel labelBordure = new JLabel();
+
+        this.add(labelBordure, JLayeredPane.POPUP_LAYER);
+        labelBordure.setBounds(0, 0,TAILLE, TAILLE);
 
         //Taille de la parcelle
         this.setPreferredSize(new Dimension( 50, 50));
         setComponentPopupMenu(ContextMenu.getInstance());
-
-        updateImage();
 
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -146,14 +151,14 @@ public class Parcelle  extends JLayeredPane  implements Observer{
              * Change la bordure de la parcelle quand la souris est dessus
              */
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                bordure.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+                labelBordure.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
             }
 
             /**
              * Change la bordure de la parcelle quand la souris n'est plus dessus
              */
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                bordure.setBorder(null);
+                labelBordure.setBorder(null);
             }
         });
     }
@@ -229,6 +234,14 @@ public class Parcelle  extends JLayeredPane  implements Observer{
         }
         else{
             labelObjet.setIcon(null);
+        }
+
+        //si il y a un epouvantail
+        if(Modele.getInstance().getNbEpouvantail(indiceX,indiceY) > 0){
+            labelBordureEpouvantail.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 1));
+        }
+        else{
+            labelBordureEpouvantail.setBorder(null);
         }
     }
 

@@ -17,8 +17,8 @@ public class FabriqueEpouvantail extends  FabriqueObjet{
     }
 
     @Override
-    public Objet creer() {
-        return new Epouvantail();
+    public Objet creer(Parcelle parcelle) {
+        return new Epouvantail(parcelle);
     }
 
     @Override

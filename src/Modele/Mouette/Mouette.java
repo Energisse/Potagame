@@ -73,7 +73,7 @@ public class Mouette  implements Serializable {
             int x = (int) this.x;
             int y = (int) this.y;
 
-            if(Modele.getInstance().getLegume(x,y) != null){
+            if(Modele.getInstance().getLegume(x,y) != null && Modele.getInstance().getNbEpouvantail(x,y) == 0){
                 //lance le processus de mangé un legume
                 pourcentageLegumeMange = 0;
             }
@@ -85,7 +85,7 @@ public class Mouette  implements Serializable {
 
     /**
      * Retourne la position X de la mouette en pourcentage de case (0.5 = 50% d'une case) (2,5 = 2 cases + 0.5% d'une case)
-     * @return
+     * @return float position X
      */
     public float getX(){
         return this.x;
@@ -93,7 +93,7 @@ public class Mouette  implements Serializable {
 
     /**
      * Retourne la position Y de la mouette en pourcentage de case (0.5 = 50% d'une case) (2,5 = 2 cases + 0.5% d'une case)
-     * @return
+     * @return float position Y
      */
     public float getY(){
         return this.y;
@@ -101,7 +101,7 @@ public class Mouette  implements Serializable {
 
     /**
      * Retourne si la mouette a finit son trajet
-     * @return
+     * @return boolean finit
      */
     public boolean aFinit(){
         return this.finit;

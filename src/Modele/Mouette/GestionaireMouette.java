@@ -26,10 +26,9 @@ public class GestionaireMouette implements Runnable {
      */
     private static final float PROBABILITE_APPARITION = 0.01F;
 
-
     /**
      * Retourne l'instance du gestionnaire de mouette
-     * @return
+     * @return instance du gestionnaire de mouette
      */
     public static GestionaireMouette getInstance(){
         if (instance == null){
