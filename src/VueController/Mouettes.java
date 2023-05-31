@@ -70,8 +70,8 @@ public class Mouettes extends JPanel implements Observer{
         //update every mouette
         for(int i = 0; i < mouettes.size(); i++){
             mouettes.get(i).setBounds(
-                    (int)(Parcelle.TAILLE*Modele.getInstance().getMouettes().get(i).getX()),
-                    (int)(Parcelle.TAILLE*Modele.getInstance().getMouettes().get(i).getY())
+                    (int)(Parcelle.TAILLE*Modele.getInstance().getMouettes().get(i).getX()-TAILLE/2),
+                    (int)(Parcelle.TAILLE*Modele.getInstance().getMouettes().get(i).getY()-TAILLE/2)
                     ,TAILLE,TAILLE);
         }
 

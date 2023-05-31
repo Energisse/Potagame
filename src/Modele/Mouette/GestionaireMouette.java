@@ -22,6 +22,12 @@ public class GestionaireMouette implements Runnable {
     private static final int  MAX_MOUETTE = 10;
 
     /**
+     * Probabilité d'apparition d'une mouette
+     */
+    private static final float PROBABILITE_APPARITION = 0.01F;
+
+
+    /**
      * Retourne l'instance du gestionnaire de mouette
      * @return
      */
@@ -46,10 +52,11 @@ public class GestionaireMouette implements Runnable {
             }
         }
 
-        //ajoute une mouette avec une probabilité de 1%
-        if(listMouettes.size() < MAX_MOUETTE && Math.random() < 0.01){
+        //ajoute une mouette
+        if(listMouettes.size() < MAX_MOUETTE && Math.random() < PROBABILITE_APPARITION){
             float y = (float) (Math.random() * (float) Modele.getInstance().getHauteur());
-            listMouettes.add(new Mouette(0,y));
+            //apparait une demie case avant le bord a gauche
+            listMouettes.add(new Mouette((float) -0.5,y));
         }
     }
 

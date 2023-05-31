@@ -21,6 +21,21 @@ public class Mouette  implements Serializable {
      */
     private boolean finit = false;
 
+    /**
+     * Pourcentage de mangé le legume
+     */
+    private float pourcentageLegumeMange = -1;
+
+    /**
+     * Vitesse de mange de la mouette
+     */
+    private static final float VITESSE_MANGE = 0.01F;
+
+    /**
+     * Chance de mangé un legume quand la mouette passe au dessus une chance sur 10
+     */
+    private static final float CHANCE_MANGER_LEGUME = 0.1F;
+
     /*
      * Constructeur de la mouette
      */
@@ -34,7 +49,36 @@ public class Mouette  implements Serializable {
      */
     public void deplacer(){
         if(finit)return;
+
+        //si la mouette est en train de mangé un legume
+        if(pourcentageLegumeMange >= 0){
+            //augmente le pourcentage de mangé le legume
+            pourcentageLegumeMange += VITESSE_MANGE;
+            //si la mouette a mangé le legume
+            if(pourcentageLegumeMange >= 1){
+                pourcentageLegumeMange = -1;
+                //arache le legume
+                int x = (int) this.x;
+                int y = (int) this.y;
+                Modele.getInstance().aracher(x,y);
+            }
+            return;
+        }
+
+        int dernierX = (int) this.x;
         this.x+=0.1;
+
+        //detecte les changements de case
+        if(dernierX != (int) this.x && Math.random() < CHANCE_MANGER_LEGUME){
+            int x = (int) this.x;
+            int y = (int) this.y;
+
+            if(Modele.getInstance().getLegume(x,y) != null){
+                //lance le processus de mangé un legume
+                pourcentageLegumeMange = 0;
+            }
+        }
+
         if(this.x > Modele.getInstance().getLargeur()+0.5f)
             finit = true;
     }

@@ -140,6 +140,9 @@ public class Modele extends Observable implements Runnable, Serializable {
      * @return Legume
      */
     public Legume getLegume(int x, int y) {
+        // Si les coordonnées sont hors du potager
+        if(x >= largeur || y >= hauteur || x < 0 || y < 0)
+            return null;
         return tabParcelles[x][y].getLegume();
     }
 

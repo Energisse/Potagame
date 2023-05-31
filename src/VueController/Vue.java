@@ -88,8 +88,8 @@ public class Vue extends JFrame implements Observer {
         }
 
         // Initialisation des parcelles
-        for (int x = 0; x < Modele.getInstance().getLargeur(); x++) {
-            for (int y = 0; y < Modele.getInstance().getHauteur(); y++) {
+        for (int y = 0; y < Modele.getInstance().getLargeur(); y++) {
+            for (int x = 0; x < Modele.getInstance().getHauteur(); x++) {
                 try {
                     tabParcelles[x][y] = new Parcelle(x, y);
                 } catch (IOException e) {
