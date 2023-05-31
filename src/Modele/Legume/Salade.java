@@ -18,14 +18,6 @@ public class Salade extends Legume {
     public static final int PRIX = 5;
 
     /**
-     * Retourne l'image du légume
-     * @return String
-     */
-    public String getImage(){
-        return image;
-    }
-
-    /**
      * Retourne le nom du légume
      * @return String
      */

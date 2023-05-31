@@ -1,13 +1,12 @@
 package Modele.Fabrique;
 
 import Modele.Parcelle;
-import Modele.Legume.Legume;
 
-public abstract class Fabrique {
+public abstract class Fabrique<T> {
 
-    public abstract boolean peutEtrePlante(Parcelle parcelle);
+    public abstract boolean peutEtrePose(Parcelle parcelle);
 
-    public abstract Legume creerLegume();
+    public abstract T creer();
 
     public abstract int getPrix();
 }

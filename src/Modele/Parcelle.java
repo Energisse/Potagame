@@ -3,6 +3,7 @@ package Modele;
 import java.io.Serializable;
 
 import Modele.Legume.Legume;
+import Modele.Objet.Objet;
 
 public class Parcelle implements Runnable, Serializable {
 
@@ -36,6 +37,11 @@ public class Parcelle implements Runnable, Serializable {
     private boolean rocher;
 
     /**
+     * Objet contenu dans la parcelle
+     */
+    private Objet objet;
+
+    /**
      * Constructeur de la parcelle
      * @param x Coordonnées X
      * @param y Coordonnées Y
@@ -62,14 +68,6 @@ public class Parcelle implements Runnable, Serializable {
      */
     public void setLegume(Legume legume){
         this.legume = legume;
-    }
-
-    /**
-     * Retourne vrai si la parcelle est libre
-     * @return boolean
-     */
-    public boolean isFree(){
-        return this.legume == null;
     }
 
     /**
@@ -100,7 +98,7 @@ public class Parcelle implements Runnable, Serializable {
 
     /**
      * Retourne vrai si le légume contenu dans la parcelle est récoltable
-     * @return
+     * @return boolean
      */
     public boolean estRecoltable() {
         return this.legume != null && this.legume.estRecoltable();
@@ -116,7 +114,7 @@ public class Parcelle implements Runnable, Serializable {
 
     /**
      * Modifie le taux d'humidité de la parcelle
-     * @param i
+     * @param i Nouveau taux d'humidité
      */
     public void setHumidite(int i) {
         this.humidite = i;
@@ -140,7 +138,7 @@ public class Parcelle implements Runnable, Serializable {
 
     /**
      * Modifie le rocher de la parcelle
-     * @param b
+     * @param b etat du rocher
      */
     public void setRocher(boolean b) {
         this.rocher = b;
@@ -148,9 +146,25 @@ public class Parcelle implements Runnable, Serializable {
 
     /**
      * Modifie l'herbe de la parcelle
-     * @param b
+     * @param b etat de l'herbe
      */
     public void setHerbe(boolean b) {
         this.herbe = b;
+    }
+
+    /**
+     * Retourne l'ojet contenu dans la parcelle
+     * @return Objet contenu dans la parcelle
+     */
+    public Objet getObjet() {
+        return this.objet;
+    }
+
+    /**
+     * Modifie l'objet contenu dans la parcelle
+     * @param objet Objet a mettre dans la parcelle
+     */
+    public void setObjet(Objet objet) {
+        this.objet = objet;
     }
 }

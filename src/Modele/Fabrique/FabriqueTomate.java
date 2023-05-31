@@ -1,10 +1,9 @@
 package Modele.Fabrique;
 
-import Modele.Parcelle;
 import Modele.Legume.Legume;
 import Modele.Legume.Tomate;
 
-public class FabriqueTomate extends Fabrique{
+public class FabriqueTomate extends FabriqueLegume{
 
     /**
      * Prix de la tomate
@@ -12,15 +11,7 @@ public class FabriqueTomate extends Fabrique{
     public static final int PRIX = 1;
 
     @Override
-    public boolean peutEtrePlante(Parcelle parcelle) {
-        if(parcelle.isFree()){
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public Legume creerLegume() {
+    public Legume creer() {
         return new Tomate();
     }
     

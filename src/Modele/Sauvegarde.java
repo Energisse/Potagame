@@ -2,7 +2,6 @@ package Modele;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,7 +10,6 @@ public class Sauvegarde {
 
     /**
      * Sauvegarde le modèle dans un fichier
-     * @throws IOException
      */
     public static void sauvegarder() {
         try (FileOutputStream fileOut = new FileOutputStream("sauvegarde.ser");
@@ -27,7 +25,6 @@ public class Sauvegarde {
     /**
      * Charge le modèle depuis un fichier
      * @return le modèle chargé si la sauvegarde existe, null sinon 
-     * @throws IOException
      */
     public static Modele charger() {
         try (FileInputStream fileIn = new FileInputStream("sauvegarde.ser");
@@ -36,9 +33,7 @@ public class Sauvegarde {
             Modele.setInstance(obj);
             System.out.println("Chargement effectué avec succès !");
             return obj;
-        } catch (IOException e) {
-            System.out.println("Une erreur s'est produite lors du chargement : " + e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("Une erreur s'est produite lors du chargement : " + e.getMessage());
         }
         return null;

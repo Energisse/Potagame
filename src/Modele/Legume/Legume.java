@@ -19,7 +19,6 @@ public abstract class Legume implements Serializable{
 
     /**
      * Vie du légume
-     * @return
      */
     protected int vie = 100;
 
@@ -28,12 +27,6 @@ public abstract class Legume implements Serializable{
      * @return int
      */
     public abstract int getPrixRevente();
-
-    /**
-     * Retourne l'image du légume
-     * @return String
-     */
-    public abstract String getImage();
 
     /**
      * Retourne le nom du légume
@@ -61,7 +54,6 @@ public abstract class Legume implements Serializable{
 
     /**
      * Fait pousser le légume
-     * @return void
      */
     public void pousser(Parcelle parcelle){
         if(!aFinitCroissance()){
@@ -114,7 +106,8 @@ public abstract class Legume implements Serializable{
     }
 
     /**
-     * @return
+     * Retourne le taux de maladie du légume
+     * @return float
      */
     public float getTauxMaladie() {
         return tauxMaladie;

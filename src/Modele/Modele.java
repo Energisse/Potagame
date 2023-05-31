@@ -4,9 +4,12 @@ import java.util.Observable;
 import java.io.Serializable;
 import java.lang.Runnable;
 import Modele.Fabrique.Fabrique;
+import Modele.Fabrique.FabriqueLegume;
+import Modele.Fabrique.FabriqueObjet;
 import Modele.Legume.Legume;
 import Modele.Mouette.GestionaireMouette;
 import Modele.Mouette.Mouette;
+import Modele.Objet.Objet;
 
 public class Modele extends Observable implements Runnable, Serializable {
 
@@ -23,7 +26,7 @@ public class Modele extends Observable implements Runnable, Serializable {
     /**
      * Liste des parcelles
      */
-    private Parcelle [][] tabParcelles = new Parcelle[largeur][hauteur];
+    private final Parcelle [][] tabParcelles = new Parcelle[largeur][hauteur];
 
     /**
      * Argent du joueur
@@ -68,7 +71,7 @@ public class Modele extends Observable implements Runnable, Serializable {
 
     /**
      * Modifie l'instance du modèle
-     * @param newInstance
+     * @param newInstance Nouvelle instance
      */
     public static void setInstance(Modele newInstance) {
         instance = newInstance;
@@ -112,13 +115,13 @@ public class Modele extends Observable implements Runnable, Serializable {
 
 
     /**
-     * Plante un légume aux coordonnées x et y
+     * Place un legume ou un objet a une parcelle
      * @param x Coordonnée x
      * @param y Coordonnée y
-     * @param Fabrique permettant de planter le légume
+     * @param fabrique permettant de poser l'ojet ou le legume
      */
-    public void planter(int x, int y, Fabrique fabrique) {
-        if(!fabrique.peutEtrePlante(getParcelle(x, y))){
+    public void poser(int x, int y, Fabrique fabrique) {
+        if(!fabrique.peutEtrePose(getParcelle(x, y))){
             return;
         }
 
@@ -128,7 +131,15 @@ public class Modele extends Observable implements Runnable, Serializable {
 
         argent -= fabrique.getPrix();
 
-        tabParcelles[x][y].setLegume(fabrique.creerLegume());
+
+        if(fabrique instanceof  FabriqueLegume fabriqueLegume) {
+            tabParcelles[x][y].setLegume(fabriqueLegume.creer());
+
+        }
+        else if (fabrique instanceof  FabriqueObjet fabriqueObjet){
+            tabParcelles[x][y].setObjet(fabriqueObjet.creer());
+        }
+
         setChanged();
         notifyObservers();
     }
@@ -198,9 +209,9 @@ public class Modele extends Observable implements Runnable, Serializable {
 
     /**
      * Retourne l'humidité de la parcelle aux coordonnées x et y
-     * @param x
-     * @param y
-     * @return
+     * @param x Coordonnée x
+     * @param y Coordonnée y
+     * @return humidité
      */
     public int getHumidite(int x, int y) {
         return tabParcelles[x][y].getHumidite();
@@ -208,18 +219,25 @@ public class Modele extends Observable implements Runnable, Serializable {
 
     /**
      * Set la vitesse du jeu
-     * @param vitesse
-     * @return
+     * @param vitesse Vitesse du jeu
      */
     public void setVitesse(int vitesse) {
         this.vitesse = vitesse;
     }
 
     /**
+     * Retourne la vitesse du jeu
+     * @return vitesse
+     */
+    public int getVitesse() {
+        return vitesse;
+    }
+
+    /**
      * Retourne si la parcelle aux coordonnées x et y a de l'herbe
-     * @param x
-     * @param y
-     * @return
+     * @param x Coordonnée x
+     * @param y Coordonnée y
+     * @return boolean
      */
     public boolean aDeLHerbe(int x, int y) {
         return tabParcelles[x][y].aDeLHerbe();
@@ -227,9 +245,9 @@ public class Modele extends Observable implements Runnable, Serializable {
 
     /**
      * Retourne si la parcelle aux coordonnées x et y a un rocher
-     * @param x
-     * @param y
-     * @return
+     * @param x Coordonnée x
+     * @param y Coordonnée y
+     * @return boolean
      */
     public boolean aUnRocher(int x, int y) {
         return tabParcelles[x][y].aUnRocher();
@@ -237,8 +255,8 @@ public class Modele extends Observable implements Runnable, Serializable {
 
     /**
      * Mine le rocher aux coordonnées x et y si possible et si le joueur a assez d'argent
-     * @param indiceX
-     * @param indiceY
+     * @param indiceX Coordonnée x
+     * @param indiceY Coordonnée y
      */
     public void miner(int indiceX, int indiceY) {
         if(!tabParcelles[indiceX][indiceY].aUnRocher())return;
@@ -256,8 +274,8 @@ public class Modele extends Observable implements Runnable, Serializable {
 
     /**
      * Labourer la parcelle aux coordonnées x et y si possible et si le joueur a assez d'argent
-     * @param indiceX
-     * @param indiceY
+     * @param indiceX Coordonnée x
+     * @param indiceY Coordonnée y
      */
     public void labourer(int indiceX, int indiceY) {
         if(!tabParcelles[indiceX][indiceY].aDeLHerbe())return;
@@ -275,9 +293,9 @@ public class Modele extends Observable implements Runnable, Serializable {
 
     /**
      * Retourne le taux de brullure du legume aux coordonnées x et y
-     * @param x
-     * @param y
-     * @return
+     * @param x Coordonnée x
+     * @param y Coordonnée y
+     * @return taux de brulure
      */
     public float getTauxBrulure(int x, int y) {
         return tabParcelles[x][y].getLegume().getTauxBrulure();
@@ -285,22 +303,40 @@ public class Modele extends Observable implements Runnable, Serializable {
 
     /**
      * Retourne le taux de maladie du legume aux coordonnées x et y
-     * @param x
-     * @param y
-     * @return
+     * @param x Coordonnée x
+     * @param y Coordonnée y
+     * @return taux de maladie
      */
     public float getTauxMaladie(int x, int y) {
         return tabParcelles[x][y].getLegume().getTauxMaladie();
     }
 
     /**
-     * get mouettes
+     * Retourne les mouettes
+     * @return mouettes
      */
     public ArrayList<Mouette> getMouettes() {
         return GestionaireMouette.getInstance().getMouettes();
     }
 
+    /**
+     * Retourne l'objet aux coordonnées x et y
+     * @param x Coordonnée x
+     * @param y Coordonnée y
+     * @return objet
+     */
+    public Objet getObjet(int x, int y) {
+        return tabParcelles[x][y].getObjet();
+    }
 
+    /**
+     * Enleve l'objet aux coordonnées x et y
+     * @param indiceX Coordonnée x
+     * @param indiceY Coordonnée y
+     */
+    public void enleverObjet(int indiceX, int indiceY) {
+        tabParcelles[indiceX][indiceY].setObjet(null);
+    }
 }
 
 

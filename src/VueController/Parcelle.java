@@ -22,44 +22,29 @@ import java.awt.image.*;
 public class Parcelle  extends JLayeredPane  implements Observer{
 
     /**
-     * ImageIcon de la terre humide
-     */
-    private static BufferedImage terreHumideImage;
-    
-    /**
-     * ImageIcon de la terre 
-     */
-    private static BufferedImage terreImage;
-
-    /**
-     * ImageIcon de l'herbe
-     */
-    private static ImageIcon herbeImage;
-
-    /**
-     * ImageIcon du Rocher
-     */
-    private static ImageIcon rocherImage;
-    
-    /**
      * Indice X de la parcelle
      */
-    private int indiceX;
+    private final int indiceX;
 
     /**
      * Indice Y de la parcelle
      */
-    private int indiceY;
+    private final int indiceY;
 
     /**
      * Label contenant l'image de la terre
      */
-    private JLabel labelTerre;
+    private final JLabel labelTerre;
 
     /**
      * Label contenant l'image du legume
      */
-    private JLabel labelLegume;
+    private final JLabel labelLegume;
+
+    /**
+     * Label contenant l'objet
+     */
+    private final JLabel labelObjet;
     
     /**
      * Taille de la parcelle
@@ -69,7 +54,7 @@ public class Parcelle  extends JLayeredPane  implements Observer{
     /**
      * Map de toutes les images possible contenue dans la parcelle
      */
-    private static HashMap<String, BufferedImage> imageMap;
+    private static final HashMap<String, ImageIcon> imageMap;
 
     /**
      * Etat de l'herbe
@@ -87,25 +72,26 @@ public class Parcelle  extends JLayeredPane  implements Observer{
      */
     private EtatHerbe lastEtatHerbe = EtatHerbe.NON_HERBE;
 
-    /**
-     * Initialisation de la map d'image
-     */
     static {
-        imageMap = new HashMap<String, BufferedImage>();
+        imageMap = new HashMap<>();
         try {
-            terreHumideImage = ImageIO.read(new File("./src/images/Terre_humide.png"));
-            terreImage = ImageIO.read(new File("./src/images/Terre.png"));
+            imageMap.put("terreHumide",new ImageIcon(ImageIO.read(new File("./src/images/Terre_humide.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
+            imageMap.put("terre",new ImageIcon(ImageIO.read(new File("./src/images/Terre.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
 
-            herbeImage = new ImageIcon(ImageIO.read(new File("./src/images/Herbe.png")).getScaledInstance(TAILLE, TAILLE, java.awt.Image.SCALE_SMOOTH));
-            rocherImage = new ImageIcon(ImageIO.read(new File("./src/images/Rocher.png")).getScaledInstance(TAILLE, TAILLE, java.awt.Image.SCALE_SMOOTH));
+            imageMap.put("herbe",new ImageIcon(ImageIO.read(new File("./src/images/Herbe.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
+            imageMap.put("rocher",new ImageIcon(ImageIO.read(new File("./src/images/Rocher.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
 
-            imageMap.put("crame",ImageIO.read(new File("./src/images/Crame.png")));
-            imageMap.put("pourriture",ImageIO.read(new File("./src/images/Pourriture.png")));
-            imageMap.put("herbeFleure1",ImageIO.read(new File("./src/images/Herbe_fleure1.png")));
-            imageMap.put("herbeFleure2",ImageIO.read(new File("./src/images/Herbe_fleure2.png")));
-            imageMap.put("herbeFleure3",ImageIO.read(new File("./src/images/Herbe_fleure3.png")));
-            imageMap.put(Tomate.nom,ImageIO.read(new File(Tomate.image)));
-            imageMap.put(Salade.nom,ImageIO.read(new File(Salade.image)));
+            imageMap.put("crame",new ImageIcon(ImageIO.read(new File("./src/images/Crame.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
+            imageMap.put("pourriture",new ImageIcon(ImageIO.read(new File("./src/images/Pourriture.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
+
+            imageMap.put("epouvantail",new ImageIcon(ImageIO.read(new File("./src/images/Epouvantail.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
+
+            imageMap.put("herbeFleure1",new ImageIcon(ImageIO.read(new File("./src/images/Herbe_fleure1.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
+            imageMap.put("herbeFleure2",new ImageIcon(ImageIO.read(new File("./src/images/Herbe_fleure2.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
+            imageMap.put("herbeFleure3",new ImageIcon(ImageIO.read(new File("./src/images/Herbe_fleure3.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
+            imageMap.put(Tomate.nom,new ImageIcon(ImageIO.read(new File(Tomate.image)).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
+            imageMap.put(Salade.nom,new ImageIcon(ImageIO.read(new File(Salade.image)).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -115,7 +101,7 @@ public class Parcelle  extends JLayeredPane  implements Observer{
      * Constructeur de la parcelle
      * @param indiceX Indice X de la parcelle
      * @param indiceY Indice Y de la parcelle
-     * @throws IOException
+     * @throws IOException Exception si l'image n'est pas trouvée
      */
     Parcelle(int indiceX,int indiceY) throws IOException{
         super();
@@ -128,11 +114,15 @@ public class Parcelle  extends JLayeredPane  implements Observer{
         //Création du label du legume
         labelLegume = new JLabel();
 
+        //Création du label de l'objet
+        labelObjet = new JLabel();
+
         labelTerre.setBounds(0, 0,TAILLE, TAILLE);
         //change opacity of labelTerreHumide
 
         this.add(labelTerre, JLayeredPane.DEFAULT_LAYER);
         this.add(labelLegume, JLayeredPane.PALETTE_LAYER);
+        this.add(labelObjet, JLayeredPane.POPUP_LAYER);
 
         JLabel bordure = new JLabel(); 
 
@@ -174,22 +164,14 @@ public class Parcelle  extends JLayeredPane  implements Observer{
     private void updateImage(){
         //Ajoute l'image de l'herbe
         if(Modele.getInstance().getParcelle(indiceX, indiceY).aDeLHerbe()){
-            switch (this.lastEtatHerbe){
-                case HERBE:
-                    this.labelTerre.setIcon(herbeImage);
-                    break;
-                case HERBE_FLEURE1:
-                    this.labelTerre.setIcon(new ImageIcon(imageMap.get("herbeFleure1").getScaledInstance(TAILLE, TAILLE, java.awt.Image.SCALE_SMOOTH)));
-                    break;
-                case HERBE_FLEURE2:
-                    this.labelTerre.setIcon(new ImageIcon(imageMap.get("herbeFleure2").getScaledInstance(TAILLE, TAILLE, java.awt.Image.SCALE_SMOOTH)));
-                    break;
-                case HERBE_FLEURE3:
-                    this.labelTerre.setIcon(new ImageIcon(imageMap.get("herbeFleure3").getScaledInstance(TAILLE, TAILLE, java.awt.Image.SCALE_SMOOTH)));
-                    break;
+            switch (this.lastEtatHerbe) {
+                case HERBE -> this.labelTerre.setIcon(imageMap.get("herbe"));
+                case HERBE_FLEURE1 -> this.labelTerre.setIcon(imageMap.get("herbeFleure1"));
+                case HERBE_FLEURE2 -> this.labelTerre.setIcon(imageMap.get("herbeFleure2"));
+                case HERBE_FLEURE3 -> this.labelTerre.setIcon(imageMap.get("herbeFleure3"));
             }
             if(Modele.getInstance().getParcelle(indiceX, indiceY).aUnRocher()){
-                this.labelLegume.setIcon(rocherImage);
+                this.labelLegume.setIcon(imageMap.get("rocher"));
                 labelLegume.setBounds(0,0,TAILLE, TAILLE);
             }
             else{
@@ -225,7 +207,7 @@ public class Parcelle  extends JLayeredPane  implements Observer{
             }
             //Sinon on met a jour l'image du legume
             else{
-                labelLegume.setIcon(new ImageIcon(imageMap.get(legume.getNom()).getScaledInstance(taille,taille, java.awt.Image.SCALE_SMOOTH)));
+                labelLegume.setIcon(new ImageIcon(imageMap.get(legume.getNom()).getImage().getScaledInstance(taille,taille, java.awt.Image.SCALE_SMOOTH)));
             }
 
             //Positionnement de l'image du legume
@@ -235,7 +217,19 @@ public class Parcelle  extends JLayeredPane  implements Observer{
             this.labelLegume.setIcon(null);
         }
 
-        labelTerre.setIcon(new ImageIcon(superpossitionImage(terreImage,terreHumideImage,Modele.getInstance().getHumidite(indiceX,indiceY) / 100f).getScaledInstance(TAILLE,TAILLE, java.awt.Image.SCALE_SMOOTH)));
+        labelTerre.setIcon(new ImageIcon(superpossitionImage(
+                imageMap.get("terre"),
+                imageMap.get("terreHumide"),
+                Modele.getInstance().getHumidite(indiceX,indiceY) / 100f
+        ).getScaledInstance(TAILLE,TAILLE, java.awt.Image.SCALE_SMOOTH)));
+
+        if(Modele.getInstance().getObjet(indiceX,indiceY) != null){
+            labelObjet.setIcon(imageMap.get(Modele.getInstance().getObjet(indiceX,indiceY).getNom()));
+            labelObjet.setBounds(0,0,TAILLE, TAILLE);
+        }
+        else{
+            labelObjet.setIcon(null);
+        }
     }
 
     @Override
@@ -247,15 +241,9 @@ public class Parcelle  extends JLayeredPane  implements Observer{
                 if(!Modele.getInstance().aUnRocher(indiceX,indiceY)) {
                     int rand = (int) Math.floor(Math.random() * 10);
                     switch (rand) {
-                        case 0:
-                            lastEtatHerbe = EtatHerbe.HERBE_FLEURE1;
-                            break;
-                        case 1:
-                            lastEtatHerbe = EtatHerbe.HERBE_FLEURE2;
-                            break;
-                        case 2:
-                            lastEtatHerbe = EtatHerbe.HERBE_FLEURE3;
-                            break;
+                        case 0 -> lastEtatHerbe = EtatHerbe.HERBE_FLEURE1;
+                        case 1 -> lastEtatHerbe = EtatHerbe.HERBE_FLEURE2;
+                        case 2 -> lastEtatHerbe = EtatHerbe.HERBE_FLEURE3;
                     }
                 }
             }
@@ -290,24 +278,24 @@ public class Parcelle  extends JLayeredPane  implements Observer{
      * @param source Image de fond
      * @param superposition Image a superposer
      * @param alpha Opacité de l'image a superposer
-     * @return
+     * @return Image superposé
      */
-    private BufferedImage superpossitionImage(BufferedImage source, BufferedImage superposition,float alpha ){
+    private BufferedImage superpossitionImage(ImageIcon source, ImageIcon superposition,float alpha ){
         // Créer une nouvelle BufferedImage avec un type d'image compatible avec la transparence (TYPE_INT_ARGB)
         BufferedImage sortie = new BufferedImage(
-                source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                source.getIconWidth(), source.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
 
         // Obtenir le contexte graphique de l'image transparente
         Graphics2D g2d = sortie.createGraphics();
 
         // Dessiner l'image source sur l'image transparente
-        g2d.drawImage(source, 0, 0, null);
+        g2d.drawImage(source.getImage(), 0, 0, null);
 
         // Activer la transparence
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
 
         // Dessiner l'image source sur l'image transparente
-        g2d.drawImage(superposition, 0, 0, null);
+        g2d.drawImage(superposition.getImage(), 0, 0, null);
 
         // Libérer les ressources graphiques
         g2d.dispose();
@@ -320,30 +308,30 @@ public class Parcelle  extends JLayeredPane  implements Observer{
      * @param source Image de fond
      * @param intersection Image a superposer
      * @param alpha Opacité de l'image a superposer
-     * @return
+     * @return Image intersection
      */
-    private BufferedImage intersectionImage(BufferedImage source, BufferedImage intersection,float alpha){
+    private BufferedImage intersectionImage(ImageIcon source, ImageIcon intersection,float alpha){
 
         //Etape 1 : Detoure l'image intersection avec la source en effecant un SRV_IN
         //Etape 2 : Superpose l'image source avec l'image intersection
 
         // Créer une nouvelle BufferedImage avec un type d'image compatible avec la transparence (TYPE_INT_ARGB)
-        BufferedImage sortie = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage sortie = new BufferedImage(source.getIconWidth(), source.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
 
         // Obtenir le contexte graphique de l'image transparente
         Graphics2D g2d = sortie.createGraphics();
 
         // Dessiner l'image source sur l'image transparente
-        g2d.drawImage(source, 0, 0, null);
+        g2d.drawImage(source.getImage(), 0, 0, null);
 
         //active la transparence en multiplication
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_IN)    );
 
-        g2d.drawImage(intersection, 0, 0, null);
+        g2d.drawImage(intersection.getImage(), 0, 0, null);
 
         // Libérer les ressources graphiques
         g2d.dispose();
 
-        return superpossitionImage(sortie,source,1-alpha);
+        return superpossitionImage(new ImageIcon(sortie),source,1-alpha);
     }
 }
