@@ -174,6 +174,15 @@ public class Parcelle  extends JLayeredPane  implements Observer{
             labelBordureSelection.setBorder(null);
         }
 
+
+        if(Modele.getInstance().getObjet(indiceX,indiceY) != null){
+            labelObjet.setIcon(imageMap.get(Modele.getInstance().getObjet(indiceX,indiceY).getNom()));
+            labelObjet.setBounds(0,0,TAILLE, TAILLE);
+        }
+        else{
+            labelObjet.setIcon(null);
+        }
+
         //Ajoute l'image de l'herbe
         if(Modele.getInstance().getParcelle(indiceX, indiceY).aDeLHerbe()){
             switch (this.lastEtatHerbe) {
@@ -235,13 +244,7 @@ public class Parcelle  extends JLayeredPane  implements Observer{
                 Modele.getInstance().getHumidite(indiceX,indiceY) / 100f
         ).getScaledInstance(TAILLE,TAILLE, java.awt.Image.SCALE_SMOOTH)));
 
-        if(Modele.getInstance().getObjet(indiceX,indiceY) != null){
-            labelObjet.setIcon(imageMap.get(Modele.getInstance().getObjet(indiceX,indiceY).getNom()));
-            labelObjet.setBounds(0,0,TAILLE, TAILLE);
-        }
-        else{
-            labelObjet.setIcon(null);
-        }
+
 
         //si il y a un epouvantail
         if(Modele.getInstance().getNbEpouvantail(indiceX,indiceY) > 0){

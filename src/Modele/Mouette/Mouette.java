@@ -29,7 +29,7 @@ public class Mouette  implements Serializable {
     /**
      * Vitesse de mange de la mouette
      */
-    private static final float VITESSE_MANGE = 0.01F;
+    private static final float VITESSE_MANGE = 0.005F;
 
     /**
      * Chance de mangé un legume quand la mouette passe au dessus une chance sur 10
