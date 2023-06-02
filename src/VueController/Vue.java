@@ -1,6 +1,7 @@
 package VueController;
 import javax.swing.*;
 
+import Modele.Legume.Legume;
 import Modele.Modele;
 import Modele.Sauvegarde;
 import VueController.Mouette.GestionnaireMouette;
@@ -33,6 +34,16 @@ public class Vue extends JFrame implements Observer {
      * position de la parcelle selectionnée
      */
     private final int[] positionSelectionnee = {0,0};
+
+    /**
+     * Parcelle selectionnée
+     */
+    private ParcelleBase parcelleSelectionnee = null;
+
+    /**
+     * Label parcelle selectionnée
+     */
+    private final JTextArea  labelParcelleSelectionnee = new JTextArea ();
 
     /**
      * Constructeur de la vue
@@ -87,8 +98,7 @@ public class Vue extends JFrame implements Observer {
         JPanel parcelles = new JPanel(new GridLayout(Modele.getInstance().getLargeur(), Modele.getInstance().getHauteur()));
         parcellesContainer.add(parcelles);
 
-        JPanel menu = new JPanel(new GridLayout(2, 1));
-        menu.setPreferredSize(new Dimension(200, 100));
+        JPanel menu = new JPanel(new GridLayout(3, 1));
 
         JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 10, 1);
         slider.addChangeListener(e -> Modele.getInstance().setVitesse(slider.getValue()));
@@ -114,6 +124,16 @@ public class Vue extends JFrame implements Observer {
             }
         }
 
+        parcelleSelectionnee = new ParcelleBase(0,0);
+        JPanel info = new JPanel(new GridBagLayout());
+
+        info.add(parcelleSelectionnee);
+        info.add(labelParcelleSelectionnee);
+
+        labelParcelleSelectionnee.setOpaque(false);
+        menu.add(info);
+
+
         parcelles.setBounds(0, 0, Parcelle.TAILLE * Modele.getInstance().getLargeur(), Parcelle.TAILLE * Modele.getInstance().getHauteur());
         gestionnaireMouette.setBounds(0, 0, Parcelle.TAILLE * Modele.getInstance().getLargeur(), Parcelle.TAILLE * Modele.getInstance().getHauteur());
         parcellesContainer.setPreferredSize( new Dimension(Parcelle.TAILLE * Modele.getInstance().getLargeur(), Parcelle.TAILLE * Modele.getInstance().getHauteur()));
@@ -129,6 +149,30 @@ public class Vue extends JFrame implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        parcelleSelectionnee.update(o, arg);
+        float humidite = Modele.getInstance().getParcelle(positionSelectionnee[0], positionSelectionnee[1]).getHumidite();
+        Legume legume = Modele.getInstance().getParcelle(positionSelectionnee[0], positionSelectionnee[1]).getLegume();
+        String type;
+        if(Modele.getInstance().getParcelle(positionSelectionnee[0], positionSelectionnee[1]).aUnRocher()){
+            type = "Rocher";
+        }
+        else{
+            type = switch (Modele.getInstance().getParcelle(positionSelectionnee[0], positionSelectionnee[1]).getHerbe()) {
+                case HERBE -> "Herbe";
+                case NON_HERBE -> "Terre";
+                default -> "Fleure";
+            };
+        }
+        String info = "Parcelle : " +type + "\nHumidité : " + humidite;
+        if(legume != null){
+            info += "\nLegume : " + legume.getNom() + "\nCroissance : " + legume.getCroissance() + "\nPourriture :" + Math.floor(legume.getTauxPourriture() * 100) + "%";
+        }
+        else {
+            info += "\nLegume : Aucun";
+        }
+
+        labelParcelleSelectionnee.setText(info);
+
         gestionnaireMouette.update(o, arg);
 
         //update every parcelle
@@ -163,5 +207,6 @@ public class Vue extends JFrame implements Observer {
             return;
         this.positionSelectionnee[0] = x;
         this.positionSelectionnee[1] = y;
+        parcelleSelectionnee.setPosition(x,y);
     }
 }

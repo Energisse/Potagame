@@ -50,7 +50,7 @@ public abstract class Legume implements Serializable{
     /**
      *  tauxMaladie du légume de 0 a 1
      */
-    private float tauxMaladie = 0;
+    private float tauxPourriture = 0;
 
     /**
      * Fait pousser le légume
@@ -67,8 +67,8 @@ public abstract class Legume implements Serializable{
                 parcelle.setHumidite(parcelle.getHumidite() - 1);
             }
             //a augmenter en fonction de la météo
-            tauxMaladie += 0.001;
-            if(tauxMaladie > 1) tauxMaladie = 1;
+            tauxPourriture += 0.001;
+            if(tauxPourriture > 1) tauxPourriture = 1;
 
         }
     }
@@ -109,7 +109,7 @@ public abstract class Legume implements Serializable{
      * Retourne le taux de maladie du légume
      * @return float
      */
-    public float getTauxMaladie() {
-        return tauxMaladie;
+    public float getTauxPourriture() {
+        return tauxPourriture;
     }
 }

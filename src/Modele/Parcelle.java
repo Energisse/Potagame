@@ -27,9 +27,20 @@ public class Parcelle implements Runnable, Serializable {
     private int humidite;
 
     /**
+     * Type de l'herbe
+     */
+    public enum TypeHerbe {
+        NON_HERBE,
+        HERBE,
+        HERBE_FLEURE1,
+        HERBE_FLEURE2,
+        HERBE_FLEURE3,
+    }
+
+    /**
      * Est de l'herbe
      */
-    private boolean herbe;
+    private TypeHerbe herbe;
 
     /**
      * A un rocher
@@ -59,12 +70,24 @@ public class Parcelle implements Runnable, Serializable {
         // Initialisation de l'humidité de 0 a 100 de manière aléatoire
         this.humidite = (int) (Math.random() * 100);
 
-        // chance sur 2 d'avoir de l'herbe
-        this.herbe = Math.random() < 0.5;
-
+        genererHerbe();
         // chance sur 2 d'avoir un rocher si de l'herbe
-        if (this.herbe)
+        if (this.herbe == TypeHerbe.HERBE)
             this.rocher = Math.random() < 0.5;
+    }
+
+    /**
+     * Generer l'herbe de la parcelle
+     */
+    private void genererHerbe(){
+       int rand = (int) (Math.random() * 10);
+        switch (rand) {
+            case 0, 1 -> this.herbe = TypeHerbe.HERBE;
+            case 2 -> this.herbe = TypeHerbe.HERBE_FLEURE1;
+            case 3 -> this.herbe = TypeHerbe.HERBE_FLEURE2;
+            case 4 -> this.herbe = TypeHerbe.HERBE_FLEURE3;
+            default -> this.herbe = TypeHerbe.NON_HERBE;
+        }
     }
 
     /**
@@ -95,7 +118,7 @@ public class Parcelle implements Runnable, Serializable {
         } else {
             //une chance sur 100_000 de faire d'avoir de l'herbe
             if (Math.random() < 0.00001) {
-                this.herbe = true;
+                genererHerbe();
             }
         }
     }
@@ -129,6 +152,14 @@ public class Parcelle implements Runnable, Serializable {
      * @return boolean
      */
     public boolean aDeLHerbe() {
+        return this.herbe != TypeHerbe.NON_HERBE;
+    }
+
+    /**
+     * Retourne le type de l'herbe
+     * @return TypeHerbe
+     */
+    public TypeHerbe getHerbe() {
         return this.herbe;
     }
 
@@ -152,7 +183,7 @@ public class Parcelle implements Runnable, Serializable {
      * Modifie l'herbe de la parcelle
      * @param b etat de l'herbe
      */
-    public void setHerbe(boolean b) {
+    public void setHerbe(TypeHerbe b) {
         this.herbe = b;
     }
 

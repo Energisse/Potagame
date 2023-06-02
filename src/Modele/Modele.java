@@ -232,6 +232,16 @@ public class Modele extends Observable implements Runnable, Serializable {
     }
 
     /**
+     * Retourne le type d'herbe de la parcelle aux coordonnées x et y
+     * @param x Coordonnée x
+     * @param y Coordonnée y
+     * @return type d'herbe
+     */
+    public Parcelle.TypeHerbe getHerbe(int x, int y) {
+        return tabParcelles[x][y].getHerbe();
+    }
+
+    /**
      * Retourne si la parcelle aux coordonnées x et y a un rocher
      * @param x Coordonnée x
      * @param y Coordonnée y
@@ -274,7 +284,7 @@ public class Modele extends Observable implements Runnable, Serializable {
 
         argent -= 5;
 
-        tabParcelles[indiceX][indiceY].setHerbe(false);
+        tabParcelles[indiceX][indiceY].setHerbe(Parcelle.TypeHerbe.NON_HERBE);
         setChanged();
         notifyObservers();
     }
@@ -296,7 +306,7 @@ public class Modele extends Observable implements Runnable, Serializable {
      * @return taux de maladie
      */
     public float getTauxMaladie(int x, int y) {
-        return tabParcelles[x][y].getLegume().getTauxMaladie();
+        return tabParcelles[x][y].getLegume().getTauxPourriture();
     }
 
     /**
