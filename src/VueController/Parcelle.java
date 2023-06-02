@@ -47,7 +47,12 @@ public class Parcelle  extends JLayeredPane  implements Observer{
      * Label contenant la bordure d'action de l'epouvantail
      */
     private final JLabel labelBordureEpouvantail;
-    
+
+    /**
+     * Label contenant la bordure de selection
+     */
+    private final JLabel labelBordureSelection;
+
     /**
      * Taille de la parcelle
      */
@@ -131,10 +136,10 @@ public class Parcelle  extends JLayeredPane  implements Observer{
 
         this.add(labelBordureEpouvantail, JLayeredPane.POPUP_LAYER);
 
-        JLabel labelBordure = new JLabel();
+        labelBordureSelection = new JLabel();
 
-        this.add(labelBordure, JLayeredPane.POPUP_LAYER);
-        labelBordure.setBounds(0, 0,TAILLE, TAILLE);
+        this.add(labelBordureSelection, JLayeredPane.POPUP_LAYER);
+        labelBordureSelection.setBounds(0, 0,TAILLE, TAILLE);
 
         //Taille de la parcelle
         this.setPreferredSize(new Dimension( 50, 50));
@@ -148,18 +153,12 @@ public class Parcelle  extends JLayeredPane  implements Observer{
             }
 
             /**
-             * Change la bordure de la parcelle quand la souris est dessus
+             * Change la parcelle selectionnée
              */
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                labelBordure.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+                Vue.getInstance().setPositionSelectionnee(indiceX, indiceY);
             }
 
-            /**
-             * Change la bordure de la parcelle quand la souris n'est plus dessus
-             */
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                labelBordure.setBorder(null);
-            }
         });
     }
 
@@ -167,6 +166,14 @@ public class Parcelle  extends JLayeredPane  implements Observer{
      * Met a jour l'image de la parcelle
      */
     private void updateImage(){
+
+        if(Vue.getInstance().getPositionSelectionnee()[0] == indiceX && Vue.getInstance().getPositionSelectionnee()[1] == indiceY){
+            labelBordureSelection.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+        }
+        else{
+            labelBordureSelection.setBorder(null);
+        }
+
         //Ajoute l'image de l'herbe
         if(Modele.getInstance().getParcelle(indiceX, indiceY).aDeLHerbe()){
             switch (this.lastEtatHerbe) {

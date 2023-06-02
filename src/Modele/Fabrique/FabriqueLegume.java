@@ -11,7 +11,7 @@ public abstract class FabriqueLegume extends  Fabrique<Legume> {
      * @return boolean
      */
     public boolean peutEtrePose(Parcelle parcelle){
-        return parcelle.getLegume() == null && parcelle.getObjet() == null;
+        return parcelle.getLegume() == null && parcelle.getObjet() == null && !parcelle.aUnRocher() && !parcelle.aDeLHerbe();
     }
 
     /**

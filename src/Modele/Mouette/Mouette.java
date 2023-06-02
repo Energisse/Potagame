@@ -60,7 +60,7 @@ public class Mouette  implements Serializable {
                 //arache le legume
                 int x = (int) this.x;
                 int y = (int) this.y;
-                Modele.getInstance().aracher(x,y);
+                Modele.getInstance().enlever(x,y);
             }
             return;
         }

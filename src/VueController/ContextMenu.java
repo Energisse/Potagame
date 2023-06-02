@@ -43,7 +43,7 @@ public class ContextMenu extends JPopupMenu{
         JMenuItem boutonAracher = new JMenuItem("Arracher");
         boutonAracher.addActionListener(evt -> {
             Parcelle p = (Parcelle) getInvoker();
-            Modele.getInstance().aracher(p.getIndiceX(),p.getIndiceY());
+            Modele.getInstance().enlever(p.getIndiceX(),p.getIndiceY());
         });
 
         /* Menu Labourer */
@@ -71,7 +71,7 @@ public class ContextMenu extends JPopupMenu{
         JMenuItem boutonEnleverObjet = new JMenuItem("Enlever");
         boutonEnleverObjet.addActionListener(evt -> {
             Parcelle p = (Parcelle) getInvoker();
-            Modele.getInstance().enleverObjet(p.getIndiceX(),p.getIndiceY());
+            Modele.getInstance().enlever(p.getIndiceX(),p.getIndiceY());
         });
 
         addPopupMenuListener(new PopupMenuListener() {

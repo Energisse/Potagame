@@ -103,18 +103,6 @@ public class Modele extends Observable implements Runnable, Serializable {
     }
 
     /**
-     * Arache le légume aux coordonnées x et y
-     * @param x Coordonnée x
-     * @param y Coordonnée y
-     */
-    public void aracher(int x, int y) {
-        tabParcelles[x][y].setLegume(null);
-        setChanged();
-        notifyObservers();
-    }
-
-
-    /**
      * Place un legume ou un objet a une parcelle
      * @param x Coordonnée x
      * @param y Coordonnée y
@@ -334,8 +322,9 @@ public class Modele extends Observable implements Runnable, Serializable {
      * @param indiceX Coordonnée x
      * @param indiceY Coordonnée y
      */
-    public void enleverObjet(int indiceX, int indiceY) {
+    public void enlever(int indiceX, int indiceY) {
         tabParcelles[indiceX][indiceY].setObjet(null);
+        tabParcelles[indiceX][indiceY].setLegume(null);
     }
 
     /**

@@ -16,14 +16,22 @@ public class Vue extends JFrame implements Observer {
     /**
      * Tableau de parcelle
      */
-    private Parcelle[][] tabParcelles;
+    private final Parcelle[][] tabParcelles;
 
     /**
      * Instance de la vue
      */
     private static Vue instance = null; 
 
-    private Mouettes mouettes = new Mouettes();
+    /**
+     * Mouettes
+     */
+    private final Mouettes mouettes = new Mouettes();
+
+    /**
+     * position de la parcelle selectionnée
+     */
+    private final int[] positionSelectionnee = {0,0};
 
     /**
      * Constructeur de la vue
@@ -45,6 +53,11 @@ public class Vue extends JFrame implements Observer {
                 System.exit(0);
             }
         });
+
+        setFocusable(true);
+
+        //On key down
+        addKeyListener(new ClavierListener());
     }
 
     /**
@@ -60,7 +73,7 @@ public class Vue extends JFrame implements Observer {
 
     /**
      * Construit la vue
-     * @throws IOException
+     * @throws IOException Exception
      */
     private void build() throws IOException {
         // setLayout left to right
@@ -78,7 +91,8 @@ public class Vue extends JFrame implements Observer {
 
         JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 10, 1);
         slider.addChangeListener(e -> Modele.getInstance().setVitesse(slider.getValue()));
-
+        //Non focusable pour ne pas provoquer d'interférence avec le clavier
+        slider.setFocusable(false);
         menu.add(slider);
 
         try {
@@ -129,5 +143,24 @@ public class Vue extends JFrame implements Observer {
             e.printStackTrace();
         }
     }
-}
 
+    /**
+     * Retourne la position de la parcelle selectionnée
+     * @return positionSelectionnee
+     */
+    public int[] getPositionSelectionnee() {
+        return positionSelectionnee;
+    }
+
+    /**
+     * Modifie la position de la parcelle selectionnée
+     * @param x position x
+     * @param y position y
+     */
+    public void setPositionSelectionnee(int x, int y) {
+        if(x < 0 || x >= Modele.getInstance().getLargeur() || y < 0 || y >= Modele.getInstance().getHauteur())
+            return;
+        this.positionSelectionnee[0] = x;
+        this.positionSelectionnee[1] = y;
+    }
+}
