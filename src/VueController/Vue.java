@@ -3,6 +3,7 @@ import javax.swing.*;
 
 import Modele.Modele;
 import Modele.Sauvegarde;
+import VueController.Mouette.GestionnaireMouette;
 
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -26,7 +27,7 @@ public class Vue extends JFrame implements Observer {
     /**
      * Mouettes
      */
-    private final Mouettes mouettes = new Mouettes();
+    private final GestionnaireMouette gestionnaireMouette = new GestionnaireMouette();
 
     /**
      * position de la parcelle selectionnée
@@ -114,11 +115,11 @@ public class Vue extends JFrame implements Observer {
         }
 
         parcelles.setBounds(0, 0, Parcelle.TAILLE * Modele.getInstance().getLargeur(), Parcelle.TAILLE * Modele.getInstance().getHauteur());
-        mouettes.setBounds(0, 0, Parcelle.TAILLE * Modele.getInstance().getLargeur(), Parcelle.TAILLE * Modele.getInstance().getHauteur());
+        gestionnaireMouette.setBounds(0, 0, Parcelle.TAILLE * Modele.getInstance().getLargeur(), Parcelle.TAILLE * Modele.getInstance().getHauteur());
         parcellesContainer.setPreferredSize( new Dimension(Parcelle.TAILLE * Modele.getInstance().getLargeur(), Parcelle.TAILLE * Modele.getInstance().getHauteur()));
 
         // Ajout de la mouette au LayeredPane
-        parcellesContainer.add(mouettes, Integer.valueOf(2));
+        parcellesContainer.add(gestionnaireMouette, Integer.valueOf(2));
 
         // Ajout des composants à la fenêtre
         add(parcellesContainer);
@@ -128,7 +129,7 @@ public class Vue extends JFrame implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        mouettes.update(o, arg);
+        gestionnaireMouette.update(o, arg);
 
         //update every parcelle
         for (int x=0; x< Modele.getInstance().getLargeur(); x++) {
