@@ -1,6 +1,7 @@
 package Modele;
 
 import Modele.Legume.Legume;
+import Modele.Meteo.Meteo;
 
 public class Parcelle implements Runnable {
 
@@ -23,6 +24,7 @@ public class Parcelle implements Runnable {
      */
     private int humidite;
 
+
     /**
      * Est de l'herbe
      */
@@ -43,8 +45,8 @@ public class Parcelle implements Runnable {
         this.y = y;
         this.legume = null;
     
-        // Initialisation de l'humidité de 0 a 100 de manière aléatoire
-        this.humidite = (int) (Math.random() * 100);
+        // Initialisation de l'humidité
+        this.humidite = 0;
 
         // chance sur 2 d'avoir de l'herbe
         this.herbe = Math.random() < 0.5;
@@ -78,10 +80,13 @@ public class Parcelle implements Runnable {
         return this.legume;
     }
 
+    /**
+     * Fonction permettant l'execution des différent process sur une parcelle
+     * Le choix de l'humidité d'une parcelle est effectuer de manière aléatoire en rapport à celle du jour
+     */
     @Override
     public void run() {
-        //mise a jour de l'humidité
-        this.humidite++;
+        humidite+=(int) (Math.random() * Meteo.getInstance().getMeteodata(Modele.getInstance().getTemps()).getHumiditeDuJour());
         if (this.humidite > 100) this.humidite = 100;
 
         //Si la parcelle contient un légume, on le fait pousser

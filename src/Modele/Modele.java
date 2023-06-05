@@ -33,6 +33,12 @@ public class Modele extends Observable implements Runnable {
     private int vitesse = 1;
 
     /**
+     * Variable décomptant le temps passé à réactualiser les parcelles lié à la valeur du slider de vitesse de pousse
+     * Elle est ensuite utilisée pour permettre la sélection d'un meteoData à un time précis
+     */
+    public int temps = 0;
+
+    /**
      * Instance du modèle
      */
     private static Modele instance = null;
@@ -62,6 +68,9 @@ public class Modele extends Observable implements Runnable {
         return instance;
     }
 
+    /**
+     * Mise à jour des parcelles pour un temps de simulation = vitesse modifiée par le slider
+     **/
     @Override
     public void run() {
         for(int i = 0; i < vitesse; i++){
@@ -70,6 +79,7 @@ public class Modele extends Observable implements Runnable {
                     tabParcelles[x][y].run();
                 }
             }
+            temps++;
         }
         setChanged();
         notifyObservers();
@@ -101,7 +111,7 @@ public class Modele extends Observable implements Runnable {
      * Plante un légume aux coordonnées x et y
      * @param x Coordonnée x
      * @param y Coordonnée y
-     * @param Fabrique permettant de planter le légume
+     * @param fabrique permettant de planter le légume
      */
     public void planter(int x, int y, Fabrique fabrique) {
         if(!fabrique.peutEtrePlante(getParcelle(x, y))){
@@ -199,6 +209,14 @@ public class Modele extends Observable implements Runnable {
     }
 
     /**
+     * Get la vitesse du jeu
+     * @return
+     */
+    public int getVitesse(){
+        return vitesse;
+    }
+
+    /**
      * Retourne si la parcelle aux coordonnées x et y a de l'herbe
      * @param x
      * @param y
@@ -275,6 +293,14 @@ public class Modele extends Observable implements Runnable {
     public float getTauxMaladie(int x, int y) {
         return tabParcelles[x][y].getLegume().getTauxMaladie();
     }
+
+    /**
+     * Renvoie la valeur de temps s'écoulant pour le passage de la météo
+     */
+    public int getTemps() {
+        return temps;
+    }
+
 }
 
 
