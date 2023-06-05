@@ -6,6 +6,13 @@ import Modele.Parcelle;
 public abstract class FabriqueObjet extends  Fabrique<Objet> {
 
     /**
+     * Constructeur
+     */
+    public FabriqueObjet(String nom, String image, String raccourci) {
+        super(nom, image, raccourci);
+    }
+
+    /**
      * Retourne vrai si l'objet peut être posé sur la parcelle
      * @param parcelle Parcelle sur laquelle l'objet est posé
      * @return boolean

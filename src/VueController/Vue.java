@@ -4,6 +4,7 @@ import javax.swing.*;
 import Modele.Legume.Legume;
 import Modele.Modele;
 import Modele.Sauvegarde;
+import VueController.ClavierListener.ClavierListener;
 import VueController.Mouette.GestionnaireMouette;
 
 import java.awt.*;
@@ -54,13 +55,11 @@ public class Vue extends JFrame implements Observer {
         try {
             build();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                //super.windowClosing(e);
                 Sauvegarde.sauvegarder();
                 System.exit(0);
             }
@@ -150,19 +149,28 @@ public class Vue extends JFrame implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         parcelleSelectionnee.update(o, arg);
-        float humidite = Modele.getInstance().getParcelle(positionSelectionnee[0], positionSelectionnee[1]).getHumidite();
-        Legume legume = Modele.getInstance().getParcelle(positionSelectionnee[0], positionSelectionnee[1]).getLegume();
+        int x = positionSelectionnee[0];
+        int y = positionSelectionnee[1];
+
+        float humidite = Modele.getInstance().getParcelle(x,y).getHumidite();
+        Legume legume = Modele.getInstance().getParcelle(x,y).getLegume();
         String type;
-        if(Modele.getInstance().getParcelle(positionSelectionnee[0], positionSelectionnee[1]).aUnRocher()){
-            type = "Rocher";
+
+        if(Modele.getInstance().getParcelle(x, y).aDeLHerbe()){
+            if(Modele.getInstance().aUnRocher(x,y)){
+                type = "Rocher";
+            }
+            else if(Modele.getInstance().getParcelle(x, y).getFleure() != -1){
+                type = "Fleure";
+            }
+            else{
+                type = "Herbe";
+            }
         }
         else{
-            type = switch (Modele.getInstance().getParcelle(positionSelectionnee[0], positionSelectionnee[1]).getHerbe()) {
-                case HERBE -> "Herbe";
-                case NON_HERBE -> "Terre";
-                default -> "Fleure";
-            };
+            type = "Terre";
         }
+
         String info = "Parcelle : " +type + "\nHumidité : " + humidite;
         if(legume != null){
             info += "\nLegume : " + legume.getNom() + "\nCroissance : " + legume.getCroissance() + "\nPourriture :" + Math.floor(legume.getTauxPourriture() * 100) + "%";
@@ -176,8 +184,8 @@ public class Vue extends JFrame implements Observer {
         gestionnaireMouette.update(o, arg);
 
         //update every parcelle
-        for (int x=0; x< Modele.getInstance().getLargeur(); x++) {
-            for (int y = 0; y < Modele.getInstance().getHauteur(); y++) {
+        for (x=0; x< Modele.getInstance().getLargeur(); x++) {
+            for (y = 0; y < Modele.getInstance().getHauteur(); y++) {
                 tabParcelles[x][y].update(o,arg);
             }
         }

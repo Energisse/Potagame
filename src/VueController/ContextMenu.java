@@ -6,10 +6,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-import Modele.Fabrique.FabriqueEpouvantail;
+import Modele.Fabrique.*;
 import Modele.Modele;
-import Modele.Fabrique.FabriqueSalade;
-import Modele.Fabrique.FabriqueTomate;
 
 public class ContextMenu extends JPopupMenu{
 
@@ -28,8 +26,34 @@ public class ContextMenu extends JPopupMenu{
         /* Menu Planter */
         JMenu boutonPlanter = new JMenu("Planter");
 
-        boutonPlanter.add( new ContextMenuLegume("Tomate",new FabriqueTomate(), this));
-        boutonPlanter.add(new ContextMenuLegume("Salade",new FabriqueSalade(), this));
+        /* Menu Poser */
+        JMenu boutonPoser = new JMenu("Poser");
+
+        Fabrique.getInstances().forEach(fabrique -> {
+            JMenuItem boutonFabrique = fabrique instanceof FabriqueLegume ? boutonPlanter : boutonPoser;
+
+            boutonFabrique.add(new JMenuItem(){
+                {
+                    setText(fabrique.getNom() + " " + fabrique.getPrix() + "€");
+                    addActionListener(evt -> {
+                        Parcelle p = (Parcelle) getInvoker();
+                        Modele.getInstance().poser(p.getIndiceX(),p.getIndiceY(),fabrique);
+                    });
+                }
+                {
+                    addPopupMenuListener(new PopupMenuListener() {
+                        @Override
+                        public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                            setEnabled(Modele.getInstance().getArgent() >= fabrique.getPrix());
+                        }
+                        @Override
+                        public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+                        @Override
+                        public void popupMenuCanceled(PopupMenuEvent e) {}
+                    });
+                }
+            });
+        });
 
 
         /* Menu Récolter */
@@ -60,13 +84,6 @@ public class ContextMenu extends JPopupMenu{
             Modele.getInstance().miner(p.getIndiceX(),p.getIndiceY());
         });
 
-        /* Menu placer Epouvantail */
-        JMenuItem boutonEpouvantail = new JMenuItem("Placer Epouvantail");
-        boutonEpouvantail.addActionListener(evt -> {
-            Parcelle p = (Parcelle) getInvoker();
-            Modele.getInstance().poser(p.getIndiceX(),p.getIndiceY(),new FabriqueEpouvantail());
-        });
-
         /* Menu enlever  */
         JMenuItem boutonEnleverObjet = new JMenuItem("Enlever");
         boutonEnleverObjet.addActionListener(evt -> {
@@ -77,12 +94,8 @@ public class ContextMenu extends JPopupMenu{
         addPopupMenuListener(new PopupMenuListener() {
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
                 Parcelle p = (Parcelle) getInvoker();
-                if(new FabriqueEpouvantail().peutEtrePose(Modele.getInstance().getParcelle(p.getIndiceX(),p.getIndiceY()))){
-                    add(boutonEpouvantail);
-                }
-                else if(Modele.getInstance().getParcelle(p.getIndiceX(),p.getIndiceY()).getObjet() != null){
-                    add(boutonEnleverObjet);
-                }
+
+
                 if(Modele.getInstance().getParcelle(p.getIndiceX(),p.getIndiceY()).aDeLHerbe()){
                     if(Modele.getInstance().getParcelle(p.getIndiceX(), p.getIndiceY()).aUnRocher()){
                         add(boutonMiner);
@@ -96,8 +109,17 @@ public class ContextMenu extends JPopupMenu{
                         add(boutonAracher);
                         boutonRecolter.setEnabled(Modele.getInstance().getLegume(p.getIndiceX(), p.getIndiceY()).estRecoltable());
                     }
-                    else{
+                    else if(Modele.getInstance().getObjet(p.getIndiceX(),p.getIndiceY()) == null){
                         add(boutonPlanter);
+                        add(boutonPoser);
+                    }
+                }
+                if(!Modele.getInstance().getParcelle(p.getIndiceX(), p.getIndiceY()).aUnRocher()){
+                    if(Modele.getInstance().getParcelle(p.getIndiceX(),p.getIndiceY()).getObjet() == null && Modele.getInstance().getParcelle(p.getIndiceX(),p.getIndiceY()).getLegume() == null){
+                        add(boutonPoser);
+                    }
+                    else{
+                        add(boutonEnleverObjet);
                     }
                 }
             }

@@ -2,6 +2,7 @@ package Modele;
 
 import java.io.Serializable;
 
+import Config.Config;
 import Modele.Legume.Legume;
 import Modele.Objet.Objet;
 
@@ -26,21 +27,16 @@ public class Parcelle implements Runnable, Serializable {
      */
     private int humidite;
 
-    /**
-     * Type de l'herbe
-     */
-    public enum TypeHerbe {
-        NON_HERBE,
-        HERBE,
-        HERBE_FLEURE1,
-        HERBE_FLEURE2,
-        HERBE_FLEURE3,
-    }
 
     /**
-     * Est de l'herbe
+     * A de l'herbe
      */
-    private TypeHerbe herbe;
+    private boolean herbe;
+
+    /**
+     * id du type de fleure (-1 si aucune fleure)
+     */
+    private int fleure;
 
     /**
      * A un rocher
@@ -72,22 +68,21 @@ public class Parcelle implements Runnable, Serializable {
 
         genererHerbe();
         // chance sur 2 d'avoir un rocher si de l'herbe
-        if (this.herbe == TypeHerbe.HERBE)
-            this.rocher = Math.random() < 0.5;
+        if (this.herbe && this.fleure == -1)
+            this.rocher = Math.random() < Config.getInstance().getConfigParcelle().chanceRocher();
     }
 
     /**
      * Generer l'herbe de la parcelle
      */
     private void genererHerbe(){
-       int rand = (int) (Math.random() * 10);
-        switch (rand) {
-            case 0, 1 -> this.herbe = TypeHerbe.HERBE;
-            case 2 -> this.herbe = TypeHerbe.HERBE_FLEURE1;
-            case 3 -> this.herbe = TypeHerbe.HERBE_FLEURE2;
-            case 4 -> this.herbe = TypeHerbe.HERBE_FLEURE3;
-            default -> this.herbe = TypeHerbe.NON_HERBE;
-        }
+       if(Math.random() < Config.getInstance().getConfigParcelle().chanceHerbe()) {
+            this.herbe = true;
+            this.fleure = -1;
+            if(Math.random() < Config.getInstance().getConfigParcelle().chanceFleure()) {
+                this.fleure = (int) (Math.random() * Config.getInstance().getConfigParcelle().imagesFleures().length);
+            }
+       }
     }
 
     /**
@@ -152,15 +147,15 @@ public class Parcelle implements Runnable, Serializable {
      * @return boolean
      */
     public boolean aDeLHerbe() {
-        return this.herbe != TypeHerbe.NON_HERBE;
+        return this.herbe;
     }
 
     /**
-     * Retourne le type de l'herbe
-     * @return TypeHerbe
+     * Retourne la fleure
+     * @return int
      */
-    public TypeHerbe getHerbe() {
-        return this.herbe;
+    public int getFleure() {
+        return this.fleure;
     }
 
     /**
@@ -183,7 +178,7 @@ public class Parcelle implements Runnable, Serializable {
      * Modifie l'herbe de la parcelle
      * @param b etat de l'herbe
      */
-    public void setHerbe(TypeHerbe b) {
+    public void setHerbe(boolean b) {
         this.herbe = b;
     }
 

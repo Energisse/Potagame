@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import Modele.Parcelle;
 
-public abstract class Legume implements Serializable{
+public class Legume implements Serializable{
     /**
      * Croissance du légume
      */
@@ -23,16 +23,36 @@ public abstract class Legume implements Serializable{
     protected int vie = 100;
 
     /**
+     * Prix du légume
+     */
+    protected int prix;
+
+    /**
+     * Nom
+     */
+    protected String nom;
+
+    //Constructeur
+    public Legume(String nom, int prix){
+        this.nom = nom;
+        this.prix = prix;
+    }
+
+    /**
      * Retourne le prix du légume
      * @return int
      */
-    public abstract int getPrixRevente();
+    public int getPrixRevente(){
+        return prix;
+    }
 
     /**
      * Retourne le nom du légume
      * @return String
      */
-    public abstract String getNom();
+    public String getNom(){
+        return nom;
+    }
 
     /**
      * Retourne la croissance du légume

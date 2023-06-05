@@ -1,5 +1,6 @@
 package Modele.Mouette;
 
+import Config.Config;
 import Modele.Modele;
 
 import java.util.ArrayList;
@@ -19,12 +20,12 @@ public class GestionaireMouette implements Runnable {
     /**
      * Nombre maximum de mouette
      */
-    private static final int  MAX_MOUETTE = 10;
+    private static final int  MAX_MOUETTE = Config.getInstance().getConfigMouette().max();
 
     /**
      * Probabilité d'apparition d'une mouette
      */
-    private static final float PROBABILITE_APPARITION = 0.01F;
+    private static final float PROBABILITE_APPARITION = Config.getInstance().getConfigMouette().chanceApparition();
 
     /**
      * Retourne l'instance du gestionnaire de mouette

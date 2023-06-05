@@ -1,15 +1,14 @@
 package VueController;
 
-import Modele.Legume.Legume;
-import Modele.Legume.Salade;
-import Modele.Legume.Tomate;
+import Config.Config;
+import Config.ConfigParcelle;
+import Modele.Fabrique.Fabrique;
+import Modele.Legume.*;
 import Modele.Modele;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Observable;
@@ -46,7 +45,7 @@ public class ParcelleBase extends JLayeredPane  implements Observer{
     /**
      * Taille de la parcelle
      */
-    public static final int TAILLE = 50;
+    public static final int TAILLE = Config.getInstance().getConfigParcelle().taille();
 
     /**
      * Map de toutes les images possible contenue dans la parcelle
@@ -56,27 +55,22 @@ public class ParcelleBase extends JLayeredPane  implements Observer{
 
     static {
         imageMap = new HashMap<>();
-        try {
-            imageMap.put("terreHumide",new ImageIcon(ImageIO.read(new File("./src/images/Terre_humide.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
-            imageMap.put("terre",new ImageIcon(ImageIO.read(new File("./src/images/Terre.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
+        ConfigParcelle config = Config.getInstance().getConfigParcelle();
+        imageMap.put("terreHumide", ImageLoader.loadIcon(config.imageTerreHumide(),TAILLE));
+        imageMap.put("terre", ImageLoader.loadIcon(config.imageTerre(),TAILLE));
 
-            imageMap.put("herbe",new ImageIcon(ImageIO.read(new File("./src/images/Herbe.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
-            imageMap.put("rocher",new ImageIcon(ImageIO.read(new File("./src/images/Rocher.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
+        imageMap.put("herbe", ImageLoader.loadIcon(config.imageHerbe(),TAILLE));
+        imageMap.put("rocher", ImageLoader.loadIcon(config.imageRocher(),TAILLE));
 
-            imageMap.put("crame",new ImageIcon(ImageIO.read(new File("./src/images/Crame.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
-            imageMap.put("pourriture",new ImageIcon(ImageIO.read(new File("./src/images/Pourriture.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
+        imageMap.put("crame", ImageLoader.loadIcon(config.imageCrame(),TAILLE));
+        imageMap.put("pourriture", ImageLoader.loadIcon(config.imagePourriture(),TAILLE));
 
-            imageMap.put("epouvantail",new ImageIcon(ImageIO.read(new File("./src/images/Epouvantail.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
 
-            imageMap.put("herbeFleure1",new ImageIcon(ImageIO.read(new File("./src/images/Herbe_fleure1.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
-            imageMap.put("herbeFleure2",new ImageIcon(ImageIO.read(new File("./src/images/Herbe_fleure2.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
-            imageMap.put("herbeFleure3",new ImageIcon(ImageIO.read(new File("./src/images/Herbe_fleure3.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
-            imageMap.put(Tomate.nom,new ImageIcon(ImageIO.read(new File(Tomate.image)).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
-            imageMap.put(Salade.nom,new ImageIcon(ImageIO.read(new File(Salade.image)).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH)));
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        for(int i = 0; i < config.imagesFleures().length; i++){
+            imageMap.put("herbeFleure"+i, ImageLoader.loadIcon(config.imagesFleures()[i],TAILLE));
         }
+
+        Fabrique.getInstances().forEach(fabrique-> imageMap.put(fabrique.getNom(), ImageLoader.loadIcon(fabrique.getImage(),TAILLE)));
     }
 
     /**
@@ -107,7 +101,7 @@ public class ParcelleBase extends JLayeredPane  implements Observer{
         this.add(labelObjet, JLayeredPane.POPUP_LAYER);
 
         //Taille de la parcelle
-        this.setPreferredSize(new Dimension( 50, 50));
+        this.setPreferredSize(new Dimension( TAILLE, TAILLE));
         setComponentPopupMenu(ContextMenu.getInstance());
     }
 
@@ -128,17 +122,19 @@ public class ParcelleBase extends JLayeredPane  implements Observer{
         if(Modele.getInstance().aDeLHerbe(indiceX, indiceY)){
             this.labelLegume.setIcon(null);
             //Ajoute l'image de l'herbe
-            switch (Modele.getInstance().getHerbe(indiceX, indiceY)) {
-                case HERBE -> {
-                    this.labelTerre.setIcon(imageMap.get("herbe"));
-                    if(Modele.getInstance().getParcelle(indiceX, indiceY).aUnRocher()){
-                        this.labelLegume.setIcon(imageMap.get("rocher"));
-                        labelLegume.setBounds(0,0,TAILLE, TAILLE);
-                    }
+            if(Modele.getInstance().getParcelle(indiceX, indiceY).aDeLHerbe()){
+                if(Modele.getInstance().aUnRocher(indiceX,indiceY)){
+                    this.labelTerre.setIcon(imageMap.get("rocher"));
                 }
-                case HERBE_FLEURE1 -> this.labelTerre.setIcon(imageMap.get("herbeFleure1"));
-                case HERBE_FLEURE2 -> this.labelTerre.setIcon(imageMap.get("herbeFleure2"));
-                case HERBE_FLEURE3 -> this.labelTerre.setIcon(imageMap.get("herbeFleure3"));
+                else if(Modele.getInstance().getParcelle(indiceX, indiceY).getFleure() != -1){
+                    this.labelTerre.setIcon(imageMap.get("herbeFleure"+(Modele.getInstance().getParcelle(indiceX, indiceY).getFleure())));
+                }
+                else{
+                    this.labelTerre.setIcon(imageMap.get("herbe"));
+                }
+            }
+            else{
+                this.labelTerre.setIcon(imageMap.get("terre"));
             }
             return;
         }

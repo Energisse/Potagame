@@ -31,6 +31,9 @@ public abstract class Objet implements Serializable {
         return parcelle;
     }
 
+    /**
+     * Enleve l'objet
+     */
     public abstract void enlever();
 
 }

@@ -1,13 +1,11 @@
 package VueController.Mouette;
 
+import Config.Config;
 import Modele.Modele;
+import VueController.ImageLoader;
 import VueController.Parcelle;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -16,7 +14,7 @@ public class Mouette extends JLabel implements Observer {
     /**
      * Taille d'une mouette
      */
-    private static final int TAILLE = 32;
+    private static final int TAILLE = Config.getInstance().getConfigMouette().taille();
 
     /**
      * ImageIcon de la mouette
@@ -34,14 +32,9 @@ public class Mouette extends JLabel implements Observer {
     private final int id;
 
     static {
-        try {
-            mouetteIcon = new ImageIcon[4];
-            mouetteIcon[0] = new ImageIcon(ImageIO.read(new File("./src/images/Mouette.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH));
-            mouetteIcon[1] = new ImageIcon(ImageIO.read(new File("./src/images/Mouette2.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH));
-            mouetteIcon[2] = new ImageIcon(ImageIO.read(new File("./src/images/Mouette3.png")).getScaledInstance(TAILLE, TAILLE, Image.SCALE_SMOOTH));
-            mouetteIcon[3] = mouetteIcon[1];
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        mouetteIcon = new ImageIcon[Config.getInstance().getConfigMouette().images().length];
+        for (int i = 0; i < mouetteIcon.length; i++) {
+            mouetteIcon[i] = ImageLoader.loadIcon(Config.getInstance().getConfigMouette().images()[i],TAILLE);
         }
     }
 

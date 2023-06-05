@@ -1,5 +1,6 @@
 package Modele.Mouette;
 
+import Config.Config;
 import Modele.Modele;
 
 import java.io.Serializable;
@@ -27,14 +28,19 @@ public class Mouette  implements Serializable {
     private float pourcentageLegumeMange = -1;
 
     /**
+     * Vitesse de deplacement
+     */
+    private static final float VITESSE_DEPLACEMENT = Config.getInstance().getConfigMouette().vitesseDeDeplacement();
+
+    /**
      * Vitesse de mange de la mouette
      */
-    private static final float VITESSE_MANGE = 0.005F;
+    private static final float VITESSE_MANGE = Config.getInstance().getConfigMouette().vitesseDeMange();
 
     /**
      * Chance de mangé un legume quand la mouette passe au dessus une chance sur 10
      */
-    private static final float CHANCE_MANGER_LEGUME = 0.1F;
+    private static final float CHANCE_MANGER_LEGUME = Config.getInstance().getConfigMouette().chanceDeManger();
 
     /*
      * Constructeur de la mouette
@@ -66,7 +72,7 @@ public class Mouette  implements Serializable {
         }
 
         int dernierX = (int) this.x;
-        this.x+=0.1;
+        this.x+=VITESSE_DEPLACEMENT;
 
         //detecte les changements de case
         if(dernierX != (int) this.x && Math.random() < CHANCE_MANGER_LEGUME){

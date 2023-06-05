@@ -1,5 +1,6 @@
 package Modele.Objet;
 
+import Config.Config;
 import Modele.Modele;
 import Modele.Parcelle;
 
@@ -8,12 +9,17 @@ public class Epouvantail extends  Objet{
     /**
      * Nom de l'épouvantail
      */
-    private static final String nom = "epouvantail";
+    private static final String nom = Config.getInstance().getConfigEpouvantail().nom();
 
     /**
      * Rayon d'action de l'épouvantail
      */
-    public static  final  int RAYON = 2;
+    public static  final  int RAYON = Config.getInstance().getConfigEpouvantail().portee();
+
+    /**
+     * Prix de revente de l'épouvantail
+     */
+    public static final int PRIX_REVENTE = Config.getInstance().getConfigEpouvantail().prixVente();
 
     /**
      * Constructeur de la classe Epouvantail
@@ -75,6 +81,7 @@ public class Epouvantail extends  Objet{
                 }
             }
         }
+        Modele.getInstance().setArgent(Modele.getInstance().getArgent()+PRIX_REVENTE);
     }
 
     @Override

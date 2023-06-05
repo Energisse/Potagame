@@ -10,28 +10,29 @@ import Modele.Legume.Legume;
 import Modele.Mouette.GestionaireMouette;
 import Modele.Mouette.Mouette;
 import Modele.Objet.Objet;
+import Config.Config;
 
 public class Modele extends Observable implements Runnable, Serializable {
 
     /**
      * Largeur du potager
      */
-    public int largeur =10;
+    public int largeur;
 
     /**
      * Hauteur du potager
      */
-    public int hauteur =10;
+    public int hauteur;
 
     /**
      * Liste des parcelles
      */
-    private final Parcelle [][] tabParcelles = new Parcelle[largeur][hauteur];
+    private final Parcelle [][] tabParcelles;
 
     /**
      * Argent du joueur
      */
-    private int argent = 10;
+    private int argent;
 
     /**
      * Vitesse du jeu
@@ -48,6 +49,14 @@ public class Modele extends Observable implements Runnable, Serializable {
      */
     private Modele() {
         super();
+
+        // Initialisation des variables
+        Config config = Config.getInstance();
+        largeur = config.getLargeur();
+        hauteur = config.getHauteur();
+        argent = config.getArgent();
+
+        tabParcelles = new Parcelle[largeur][hauteur];
 
         // Initialisation des parcelles
         for (int x = 0; x < largeur; x++){
@@ -196,6 +205,14 @@ public class Modele extends Observable implements Runnable, Serializable {
     }
 
     /**
+     * Modifie l'argent du joueur
+     * @param argent Nouvelle valeur de l'argent
+     */
+    public void setArgent(int argent) {
+        this.argent = argent;
+    }
+
+    /**
      * Retourne l'humidité de la parcelle aux coordonnées x et y
      * @param x Coordonnée x
      * @param y Coordonnée y
@@ -232,13 +249,13 @@ public class Modele extends Observable implements Runnable, Serializable {
     }
 
     /**
-     * Retourne le type d'herbe de la parcelle aux coordonnées x et y
+     * Retourne le type de fleure de la parcelle aux coordonnées x et y
      * @param x Coordonnée x
      * @param y Coordonnée y
-     * @return type d'herbe
+     * @return type de fleur
      */
-    public Parcelle.TypeHerbe getHerbe(int x, int y) {
-        return tabParcelles[x][y].getHerbe();
+    public int getFleure(int x, int y) {
+        return tabParcelles[x][y].getFleure();
     }
 
     /**
@@ -284,7 +301,7 @@ public class Modele extends Observable implements Runnable, Serializable {
 
         argent -= 5;
 
-        tabParcelles[indiceX][indiceY].setHerbe(Parcelle.TypeHerbe.NON_HERBE);
+        tabParcelles[indiceX][indiceY].setHerbe(false);
         setChanged();
         notifyObservers();
     }
