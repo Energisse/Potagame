@@ -3,19 +3,15 @@ package Modele.Mouette;
 import Config.Config;
 import Modele.Modele;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GestionaireMouette implements Runnable {
+public class GestionaireMouette implements Runnable, Serializable {
 
     /**
      * Liste des mouettes
      */
     private final ArrayList<Mouette> listMouettes = new ArrayList<>();
-
-    /**
-     * Instance du gestionnaire de mouette
-     */
-    private static GestionaireMouette instance = null;
 
     /**
      * Nombre maximum de mouette
@@ -27,16 +23,6 @@ public class GestionaireMouette implements Runnable {
      */
     private static final float PROBABILITE_APPARITION = Config.getInstance().getConfigMouette().chanceApparition();
 
-    /**
-     * Retourne l'instance du gestionnaire de mouette
-     * @return instance du gestionnaire de mouette
-     */
-    public static GestionaireMouette getInstance(){
-        if (instance == null){
-            instance = new GestionaireMouette();
-        }
-        return instance ;
-    }
 
     @Override
     public void run(){

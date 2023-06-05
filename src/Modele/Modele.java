@@ -11,6 +11,7 @@ import Modele.Mouette.GestionaireMouette;
 import Modele.Mouette.Mouette;
 import Modele.Objet.Objet;
 import Config.Config;
+import VueController.Vue;
 
 public class Modele extends Observable implements Runnable, Serializable {
 
@@ -38,6 +39,11 @@ public class Modele extends Observable implements Runnable, Serializable {
      * Vitesse du jeu
      */
     private int vitesse = 1;
+
+    /**
+     * Mouettes
+     */
+    private final  GestionaireMouette gestionaireMouette = new GestionaireMouette();
 
     /**
      * Instance du modèle
@@ -73,8 +79,19 @@ public class Modele extends Observable implements Runnable, Serializable {
     public static Modele getInstance() {
         if (instance == null) {
             instance = new Modele();
+            instance.addObserver(Vue.getInstance());
         }
         return instance;
+    }
+    /**
+     * Recreer un modele
+     */
+    public static void newGame() {
+        if(instance != null){
+            instance.deleteObservers();
+        }
+        instance = new Modele();
+        instance.addObserver(Vue.getInstance());
     }
 
 
@@ -83,13 +100,17 @@ public class Modele extends Observable implements Runnable, Serializable {
      * @param newInstance Nouvelle instance
      */
     public static void setInstance(Modele newInstance) {
+        if(instance != null){
+            instance.deleteObservers();
+        }
         instance = newInstance;
+        instance.addObserver(Vue.getInstance());
     }
 
     @Override
     public void run() {
         for(int i = 0; i < vitesse; i++){
-            GestionaireMouette.getInstance().run();
+            gestionaireMouette.run();
 
             for (int x = 0; x < largeur; x++){
                 for (int y = 0; y < hauteur; y++){
@@ -331,7 +352,7 @@ public class Modele extends Observable implements Runnable, Serializable {
      * @return mouettes
      */
     public ArrayList<Mouette> getMouettes() {
-        return GestionaireMouette.getInstance().getMouettes();
+        return gestionaireMouette.getMouettes();
     }
 
     /**

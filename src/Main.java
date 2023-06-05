@@ -12,14 +12,15 @@ public class Main {
         FabriqueLegume.load(Config.getInstance().getFabriqueLegumes());
         FabriqueEpouvantail.load(Config.getInstance().getConfigEpouvantail());
 
-        Modele m;
-        if((m = Sauvegarde.charger()) == null){
-            m = Modele.getInstance();
+        try {
+            Sauvegarde.charger();
         }
+        catch (Exception ignored){}
+
+        Modele m = Modele.getInstance();
 
         Vue v = Vue.getInstance();
         new Thread(Ordonnanceur.getInstance()).start();
-        m.addObserver(v);
         v.setVisible(true);
     }
 }

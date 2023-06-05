@@ -4,6 +4,7 @@ import javax.swing.*;
 import Modele.Legume.Legume;
 import Modele.Modele;
 import Modele.Sauvegarde;
+import VueController.BarMenu.BarMenu;
 import VueController.ClavierListener.ClavierListener;
 import VueController.Mouette.GestionnaireMouette;
 
@@ -60,7 +61,11 @@ public class Vue extends JFrame implements Observer {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                Sauvegarde.sauvegarder();
+                try {
+                    Sauvegarde.sauvegarder();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
                 System.exit(0);
             }
         });
@@ -91,6 +96,9 @@ public class Vue extends JFrame implements Observer {
         setLayout(new FlowLayout());
 
         setTitle("Potagame");
+
+        setJMenuBar(new BarMenu());
+
         //Contient les parcelles + les mouettes
         JLayeredPane parcellesContainer = new JLayeredPane();
         //contient les parcelles
