@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import Config.Config;
 import Modele.Legume.Legume;
-import Modele.Meteo.Meteo;
 import Modele.Objet.Objet;
 
 public class Parcelle implements Runnable, Serializable {
@@ -111,7 +110,7 @@ public class Parcelle implements Runnable, Serializable {
      */
     @Override
     public void run() {
-        humidite+=(int) (Math.random() * Meteo.getInstance().getMeteodata(Modele.getInstance().getTemps()).getHumiditeDuJour());
+        humidite+=(int) (Math.random() *Modele.getInstance().getMeteo().humidite());
         if (this.humidite > 100) this.humidite = 100;
 
         //Si la parcelle contient un légume, on le fait pousser
@@ -239,5 +238,4 @@ public class Parcelle implements Runnable, Serializable {
     public void setNbEpouvantail(int nbEpouvantails) {
         this.nbEpouvantail = nbEpouvantails;
     }
-
 }

@@ -1,18 +1,19 @@
-package VueController.BarMenu.Fichier.Effacer;
+package VueController.BarMenu.Fichier.Charger;
 
 import Modele.Sauvegarde;
+import VueController.BarMenu.DialogErreur;
 
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
-public class MenuItemEffacer extends JMenu {
+public class MenuItemCharger extends JMenu {
 
         /**
         * Constructeur du menu sauvegarder
         */
-        public MenuItemEffacer() {
-            super("Effacer");
+        public MenuItemCharger() {
+            super("Charger");
 
             addMenuListener(new MenuListener() {
                 @Override
@@ -21,12 +22,18 @@ public class MenuItemEffacer extends JMenu {
                     for( String sauvegarde : Sauvegarde.getSauvegardes()){
                         add(new JMenuItem(sauvegarde){
                             {
-                                addActionListener(e-> Sauvegarde.effacer(getText()));
+                                addActionListener(e-> {
+                                    try {
+                                        Sauvegarde.charger(getText());
+                                    } catch (Exception ex) {
+                                        new DialogErreur();
+                                    }
+                                });
                             }
                         });
                     }
                     if(getItemCount() == 0)
-                        add(new JMenuItem("C'est déjà vide par ici !"));
+                        add(new JMenuItem("Aucune sauvegarde"));
                 }
 
                 @Override
@@ -40,5 +47,4 @@ public class MenuItemEffacer extends JMenu {
                 }
             });
         }
-
 }

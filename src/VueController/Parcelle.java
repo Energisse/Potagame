@@ -25,20 +25,20 @@ public class Parcelle  extends ParcelleBase  implements Observer{
      * Constructeur de la parcelle
      * @param indiceX Indice X de la parcelle
      * @param indiceY Indice Y de la parcelle
-     * @throws IOException Exception si l'image n'est pas trouvée
      */
     Parcelle(int indiceX,int indiceY) throws IOException{
         super(indiceX,indiceY);
-
-        labelBordureEpouvantail = new JLabel();
-        labelBordureEpouvantail.setBounds(0, 0,TAILLE, TAILLE);
-
-        this.add(labelBordureEpouvantail, JLayeredPane.POPUP_LAYER);
 
         labelBordureSelection = new JLabel();
 
         this.add(labelBordureSelection, JLayeredPane.POPUP_LAYER);
         labelBordureSelection.setBounds(0, 0,TAILLE, TAILLE);
+
+
+        labelBordureEpouvantail = new JLabel();
+        labelBordureEpouvantail.setBounds(0, 0,TAILLE, TAILLE);
+
+        this.add(labelBordureEpouvantail, JLayeredPane.POPUP_LAYER);
 
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -51,7 +51,7 @@ public class Parcelle  extends ParcelleBase  implements Observer{
              * Change la parcelle selectionnée
              */
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                Vue.getInstance().setPositionSelectionnee(indiceX, indiceY);
+                Modele.getInstance().setParcelleSelectionnee(indiceX, indiceY);
             }
 
         });
@@ -70,8 +70,8 @@ public class Parcelle  extends ParcelleBase  implements Observer{
             labelBordureEpouvantail.setBorder(null);
         }
 
-        if(Vue.getInstance().getPositionSelectionnee()[0] == indiceX && Vue.getInstance().getPositionSelectionnee()[1] == indiceY){
-            labelBordureSelection.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+        if(Modele.getInstance().getParcelleSelectionnee()[0] == indiceX && Modele.getInstance().getParcelleSelectionnee()[1] == indiceY){
+            labelBordureSelection.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
         }
         else{
             labelBordureSelection.setBorder(null);

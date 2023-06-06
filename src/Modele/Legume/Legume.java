@@ -1,5 +1,4 @@
 package Modele.Legume;
-import Modele.Meteo.Meteo;
 import Modele.Modele;
 import java.io.Serializable;
 import Modele.Parcelle;
@@ -77,10 +76,9 @@ public class Legume implements Serializable{
      * Fait pousser le légume
      * Le taux de croissance est donné par une formule (complètement "aléatoire") qui permet de prendre en compte la température globale régnant
      * sur le potager ainsi que la valeur d'humidité propre à chaque parcelle: la vitesse de pousse devrait donc être légèrement différente selon les parcelles
-     * @return void
      */
     public void pousser(Parcelle parcelle){
-        tauxCroissance=(int)((Meteo.getInstance().getMeteodata(Modele.getInstance().getTemps()).getTemperatureDuJour()/parcelle.getHumidite())*10+0.5);
+        tauxCroissance=(int)((Modele.getInstance().getMeteo().temperature()/parcelle.getHumidite())*10+0.5);
         if(tauxCroissance == 0 ){ //Les valeurs étant souvent en 0.xxx, le cast en int peut retourner 0 ce qui ne permettrait pas de faire pousser la plante
             tauxCroissance=1;
         }
@@ -144,7 +142,7 @@ public class Legume implements Serializable{
 
     /**
      * Renvoie le taux de maladie du légume
-     * @return
+     * @return float
      */
     public float getTauxMaladie() {
         return tauxMaladie;

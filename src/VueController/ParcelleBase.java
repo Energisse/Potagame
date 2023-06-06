@@ -9,7 +9,6 @@ import Modele.Modele;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -77,9 +76,8 @@ public class ParcelleBase extends JLayeredPane  implements Observer{
      * Constructeur de la parcelle
      * @param indiceX Indice X de la parcelle
      * @param indiceY Indice Y de la parcelle
-     * @throws IOException Exception si l'image n'est pas trouvée
      */
-    ParcelleBase(int indiceX, int indiceY) throws IOException{
+    public ParcelleBase(int indiceX, int indiceY) {
         super();
         this.indiceX = indiceX;
         this.indiceY = indiceY;

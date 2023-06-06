@@ -7,6 +7,8 @@ import Modele.Fabrique.Fabrique;
 import Modele.Fabrique.FabriqueLegume;
 import Modele.Fabrique.FabriqueObjet;
 import Modele.Legume.Legume;
+import Modele.Meteo.Meteo;
+import Modele.Meteo.MeteoData;
 import Modele.Mouette.GestionaireMouette;
 import Modele.Mouette.Mouette;
 import Modele.Objet.Objet;
@@ -52,6 +54,11 @@ public class Modele extends Observable implements Runnable, Serializable {
     public int temps = 0;
 
     /**
+     * Parcelle selectionnée
+     */
+    private Parcelle parcelleSelectionnee;
+
+    /**
      * Instance du modèle
      */
     private static Modele instance = null;
@@ -76,6 +83,7 @@ public class Modele extends Observable implements Runnable, Serializable {
                 tabParcelles[x][y] = new Parcelle(x,y);
             }
         }
+        parcelleSelectionnee = tabParcelles[0][0];
     }
 
     /**
@@ -354,7 +362,7 @@ public class Modele extends Observable implements Runnable, Serializable {
      * @return taux de maladie
      */
     public float getTauxMaladie(int x, int y) {
-        return tabParcelles[x][y].getLegume().getTauxPourriture();
+        return tabParcelles[x][y].getLegume().getTauxMaladie();
     }
 
     /**
@@ -402,6 +410,36 @@ public class Modele extends Observable implements Runnable, Serializable {
         return temps;
     }
 
+    /**
+     * Retourne la météo actuelle
+     *
+     * @return meteo
+     */
+    public MeteoData getMeteo() {
+        return Meteo.getInstance().getMeteodata(temps);
+    }
+
+    /**
+     * Retourne la position de la parcelle selectionnée
+     * @return position de la parcelle selectionnée sous forme de tableau [x, y]
+     */
+    public int[] getParcelleSelectionnee() {
+        int[] pos = new int[2];
+        pos[0] = parcelleSelectionnee.getX();
+        pos[1] = parcelleSelectionnee.getY();
+        return pos;
+    }
+
+    /**
+     * Modifie la parcelle selectionnée
+     * @param x Coordonnées X
+     * @param y Coordonnées Y
+     */
+    public void setParcelleSelectionnee(int x, int y) {
+        if(x < 0 || x >= largeur || y < 0 || y >= hauteur)
+            return;
+        this.parcelleSelectionnee = getParcelle(x, y);
+    }
 }
 
 

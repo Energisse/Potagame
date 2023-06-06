@@ -5,9 +5,12 @@ import java.io.IOException;
 
 
 public class Meteo {
-    private static float temperature=1;
-    private static float humidite=1;
+
+    /**
+     * Instance de Meteo
+     */
     private static Meteo instance = null;
+
     /**
      * Tableau stockant des meteoData possédant chacun une température et une humidité
      */
@@ -21,11 +24,11 @@ public class Meteo {
     }
 
     /**
-     * Retourne une instance de Meteo
-     * @return
+     * Récupération de l'instance de Meteo
+     * @return instance de Meteo
      */
-    public static Meteo getInstance() {
-        if (instance == null) {
+    public static Meteo getInstance(){
+        if(instance == null){
             instance = new Meteo();
         }
         return instance;
@@ -33,7 +36,7 @@ public class Meteo {
 
     /**
      * Récupération du fichier de données météo depuis :
-     * https://www.data.gouv.fr/fr/datasets/donnees-quotidiennes-de-119-stations-en-france-metropolitaine-pour-les-etudes-de-liens-entre-meteorologie-et-covid-19-du-01-01-2020-au-21-04-2021/#/resources
+     * @see: https://www.data.gouv.fr/fr/datasets/donnees-quotidiennes-de-119-stations-en-france-metropolitaine-pour-les-etudes-de-liens-entre-meteorologie-et-covid-19-du-01-01-2020-au-21-04-2021/#/resources
      * Lecture du fichier de données récupérant 366 valeurs de température et d'humidité moyenne
      */
     public void extractDataMeteo(){
@@ -48,6 +51,7 @@ public class Meteo {
                 line = bfr.readLine();
             }
             while (line != null) {
+                float temperature,humidite;
                 String[] dataline = line.split(";");
                 if (dataline[0].contains("v")) {
                     temperature = 10;//valeur par défaut
@@ -72,8 +76,8 @@ public class Meteo {
     /**
      * Getter d'un meteoData pour un temps(horaire) donné
      * Retourne une temperature et une humidite pour 1h
-     * @param time
-     * @return
+     * @param time temps
+     * @return MeteoData
      */
     public MeteoData getMeteodata(int time) {
         return meteoData[(time/24)%365];

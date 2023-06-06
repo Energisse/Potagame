@@ -75,7 +75,7 @@
     ]
   },
   "parcelle":{
-    "taille": 64,
+    "taille": 50,
     "chanceHerbe": 0.5,
     "chanceFleure": 0.5,
     "imageHerbe":"Herbe.png",

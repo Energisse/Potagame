@@ -2,7 +2,6 @@ package VueController.ClavierListener;
 
 import Modele.Fabrique.*;
 import Modele.Modele;
-import VueController.Vue;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -39,24 +38,22 @@ public class ClavierListener implements KeyListener {
         switch (e.getKeyCode()) {
             //Deplacement avec les fleches pour selectionner une parcelle
             case KeyEvent.VK_UP -> {
-                int[] position = Vue.getInstance().getPositionSelectionnee();
-                Vue.getInstance().setPositionSelectionnee(position[0],position[1] - 1);
+                int[] position = Modele.getInstance().getParcelleSelectionnee();
+                Modele.getInstance().setParcelleSelectionnee(position[0],position[1] - 1);
             } case KeyEvent.VK_DOWN -> {
-                int[] position = Vue.getInstance().getPositionSelectionnee();
-                Vue.getInstance().setPositionSelectionnee(position[0],position[1] + 1);
-            }
-            case KeyEvent.VK_LEFT -> {
-                int[] position = Vue.getInstance().getPositionSelectionnee();
-                Vue.getInstance().setPositionSelectionnee(position[0] - 1,position[1]);
-            }
-            case KeyEvent.VK_RIGHT -> {
-                int[] position = Vue.getInstance().getPositionSelectionnee();
-                Vue.getInstance().setPositionSelectionnee(position[0] + 1,position[1]);
+                int[] position = Modele.getInstance().getParcelleSelectionnee();
+                Modele.getInstance().setParcelleSelectionnee(position[0],position[1] + 1);
+            } case KeyEvent.VK_LEFT -> {
+                int[] position = Modele.getInstance().getParcelleSelectionnee();
+                Modele.getInstance().setParcelleSelectionnee(position[0] - 1,position[1]);
+            } case KeyEvent.VK_RIGHT -> {
+                int[] position = Modele.getInstance().getParcelleSelectionnee();
+                Modele.getInstance().setParcelleSelectionnee(position[0] + 1,position[1]);
             }
 
             //Enlever un objet/legume
             case KeyEvent.VK_BACK_SPACE -> {
-                int[] position = Vue.getInstance().getPositionSelectionnee();
+                int[] position = Modele.getInstance().getParcelleSelectionnee();
                 if(Modele.getInstance().getObjet(position[0],position[1]) != null)
                     Modele.getInstance().enlever(position[0],position[1]);
                 else if(Modele.getInstance().aUnRocher(position[0],position[1]))
@@ -68,7 +65,7 @@ public class ClavierListener implements KeyListener {
 
             //recolter un legume
             case KeyEvent.VK_ENTER -> {
-                int[] position = Vue.getInstance().getPositionSelectionnee();
+                int[] position = Modele.getInstance().getParcelleSelectionnee();
                 Modele.getInstance().recolter(position[0],position[1]);
             }
 
@@ -77,7 +74,7 @@ public class ClavierListener implements KeyListener {
                 for (ListenerRaccourciFabrique listenerLegume : listenersLegume) {
                     try {
                         if (e.getKeyCode() == listenerLegume.keyEvent().getInt(null)) {
-                            int[] position = Vue.getInstance().getPositionSelectionnee();
+                            int[] position = Modele.getInstance().getParcelleSelectionnee();
                             Modele.getInstance().poser(position[0],position[1],listenerLegume.fabrique());
                         }
                     } catch (IllegalAccessException ex) {
