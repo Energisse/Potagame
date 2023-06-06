@@ -61,21 +61,24 @@
   "largeur": 10,
   "hauteur": 10,
   "mouette": {
-    "max": 10,
-    "chanceApparition": 0.02,
-    "taille": 128,
+    "max": 5,
+    "chanceApparition": 0.005,
+    "taille": 64,
     "vitesseDeMange":0.005,
-    "vitesseDeDeplacement": 0.05,
+    "vitesseDeDeplacementMin": 0.01,
+    "vitesseDeDeplacementMax": 0.05,
     "chanceDeManger": 0.5,
     "images": [
       "Mouette1.png",
       "Mouette2.png",
       "Mouette3.png",
+      "Mouette4.png",
+      "Mouette3.png",
       "Mouette2.png"
     ]
   },
   "parcelle":{
-    "taille": 32,
+    "taille": 64,
     "chanceHerbe": 0.5,
     "chanceFleure": 0.5,
     "imageHerbe":"Herbe.png",

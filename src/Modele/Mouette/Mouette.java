@@ -15,7 +15,7 @@ public class Mouette  implements Serializable {
     /**
      * Position de la mouette en pourcentage de case (0.5 = 50% d'une case) (2,5 = 2 cases + 0.5% d'une case)
      */
-    private float y;
+    private final float y;
 
     /**
      * Si la mouette a finit son trajet
@@ -28,9 +28,14 @@ public class Mouette  implements Serializable {
     private float pourcentageLegumeMange = -1;
 
     /**
-     * Vitesse de deplacement
+     * Vitesse de deplacement min
      */
-    private static final float VITESSE_DEPLACEMENT = Config.getInstance().getConfigMouette().vitesseDeDeplacement();
+    private static final float VITESSE_DEPLACEMENT_MIN = Config.getInstance().getConfigMouette().vitesseDeDeplacementMin();
+
+    /**
+     * Vitesse de deplacement max
+     */
+    private static final float VITESSE_DEPLACEMENT_MAX = Config.getInstance().getConfigMouette().vitesseDeDeplacementMax();
 
     /**
      * Vitesse de mange de la mouette
@@ -42,12 +47,19 @@ public class Mouette  implements Serializable {
      */
     private static final float CHANCE_MANGER_LEGUME = Config.getInstance().getConfigMouette().chanceDeManger();
 
+    /**
+     * Vitesse de deplacement de la mouette
+     */
+    private final float vitesse;
+
     /*
      * Constructeur de la mouette
      */
     public Mouette(float x, float y){
         this.x = x;
         this.y = y;
+
+        this.vitesse = (float) (Math.random() * (VITESSE_DEPLACEMENT_MAX - VITESSE_DEPLACEMENT_MIN) + VITESSE_DEPLACEMENT_MIN);
     }
 
     /**
@@ -71,9 +83,8 @@ public class Mouette  implements Serializable {
             return;
         }
 
-        int dernierX = (int) this.x;
-        this.x+=VITESSE_DEPLACEMENT;
-
+        int dernierX = (int) Math.floor(this.x);
+        this.x+=vitesse;
         //detecte les changements de case
         if(dernierX != (int) this.x && Math.random() < CHANCE_MANGER_LEGUME){
             int x = (int) this.x;

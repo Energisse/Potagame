@@ -7,5 +7,6 @@ public record ConfigMouette(
         int taille,
         float chanceDeManger,
         float vitesseDeMange,
-        float vitesseDeDeplacement
+        float vitesseDeDeplacementMin,
+        float vitesseDeDeplacementMax
 ) {}

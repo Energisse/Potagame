@@ -40,7 +40,8 @@ public class GestionaireMouette implements Runnable, Serializable {
 
         //ajoute une mouette
         if(listMouettes.size() < MAX_MOUETTE && Math.random() < PROBABILITE_APPARITION){
-            float y = (float) (Math.random() * (float) Modele.getInstance().getHauteur());
+            //On evite d'apparaitre sur le bord du bas avec -0.5
+            float y = (float) (Math.random() * (float) Modele.getInstance().getHauteur()-0.5);
             //apparait une demie case avant le bord a gauche
             listMouettes.add(new Mouette((float) -0.5,y));
         }
