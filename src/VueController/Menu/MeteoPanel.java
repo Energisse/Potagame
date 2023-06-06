@@ -29,9 +29,9 @@ public class MeteoPanel extends JPanel implements Observer {
 
     static {
         iconesMeteo = new ImageIcon[3];
-        iconesMeteo[0] = ImageLoader.loadIcon("soleil.png",64);
-        iconesMeteo[1] = ImageLoader.loadIcon("nuageux.png",64);
-        iconesMeteo[2] = ImageLoader.loadIcon("pluie.png",64);
+        iconesMeteo[0] = ImageLoader.loadIcon("Soleil.png",64);
+        iconesMeteo[1] = ImageLoader.loadIcon("Nuageux.png",64);
+        iconesMeteo[2] = ImageLoader.loadIcon("Pluie.png",64);
     }
 
     /**

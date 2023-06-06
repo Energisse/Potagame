@@ -63,7 +63,7 @@
   "mouette": {
     "max": 10,
     "chanceApparition": 0.02,
-    "taille": 64,
+    "taille": 128,
     "vitesseDeMange":0.005,
     "vitesseDeDeplacement": 0.05,
     "chanceDeManger": 0.5,
@@ -75,7 +75,7 @@
     ]
   },
   "parcelle":{
-    "taille": 50,
+    "taille": 32,
     "chanceHerbe": 0.5,
     "chanceFleure": 0.5,
     "imageHerbe":"Herbe.png",
