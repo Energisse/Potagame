@@ -257,7 +257,7 @@ public class Modele extends Observable implements Runnable, Serializable {
      * @param y Coordonnée y
      * @return humidité
      */
-    public int getHumidite(int x, int y) {
+    public float getHumidite(int x, int y) {
         return tabParcelles[x][y].getHumidite();
     }
 
@@ -362,7 +362,7 @@ public class Modele extends Observable implements Runnable, Serializable {
      * @return taux de maladie
      */
     public float getTauxMaladie(int x, int y) {
-        return tabParcelles[x][y].getLegume().getTauxMaladie();
+        return tabParcelles[x][y].getLegume().getTauxPourriture();
     }
 
     /**
@@ -439,6 +439,16 @@ public class Modele extends Observable implements Runnable, Serializable {
         if(x < 0 || x >= largeur || y < 0 || y >= hauteur)
             return;
         this.parcelleSelectionnee = getParcelle(x, y);
+    }
+
+    /**
+     * Retourne l'effet du lac aux coordonnées x et y
+     * @param x Coordonnée x
+     * @param y Coordonnée y
+     * @return effet du lac
+     */
+    public float getEffetLac(int x, int y) {
+        return tabParcelles[x][y].getEffetLac();
     }
 }
 

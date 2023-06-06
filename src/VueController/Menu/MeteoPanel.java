@@ -3,6 +3,8 @@ import Modele.Modele;
 import VueController.ImageLoader;
 
 import javax.swing.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class MeteoPanel extends JPanel implements Observer {
@@ -69,6 +71,8 @@ public class MeteoPanel extends JPanel implements Observer {
         try {
             iconeLabel.setIcon(iconesMeteo[evolutionIcone]);
             meteoJLabel.setText("<html> La météo du jour : "+
+                    //Année 2023 car non bissextile et date de création du jeu
+                    "<br> - " + LocalDate.ofYearDay(2023, Modele.getInstance().getTemps()/24%365  + 1).format(DateTimeFormatter.ofPattern("dd MMMM"))+
                     "<br> - Température : "+temperatureTi+"°C" +
                     "<br> - Humidité : "+humiditeTi+"% </html>");
         } catch (Exception e) {

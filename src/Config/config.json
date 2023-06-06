@@ -6,7 +6,10 @@
       "raccourci": "T",
       "description": " La tomate est un fruit-légume très polyvalent. Elle peut être utilisée dans de nombreuses préparations culinaires, telles que les salades, les sauces, les pizzas, etc. Elle est appréciée pour sa saveur riche et sa texture juteuse.",
       "prixAchat": 1,
-      "prixVente": 2
+      "prixVente": 5,
+      "humidite": 0.5,
+      "temperature": 15,
+      "tempsDePousse": 30
     },
     {
       "nom": "Salade",
@@ -14,7 +17,10 @@
       "raccourci": "S",
       "description": " La salade est un légume-feuille frais et croquant. Elle est souvent utilisée comme base pour les salades, accompagnée d'autres légumes, de protéines et de vinaigrettes. Elle est réputée pour sa fraîcheur et sa richesse en nutriments.",
       "prixAchat": 1,
-      "prixVente": 2
+      "prixVente": 5,
+      "humidite": 0.5,
+      "temperature": 15,
+      "tempsDePousse": 30
     },
     {
       "nom": "Carotte",
@@ -22,15 +28,21 @@
       "raccourci": "C",
       "description": "La carotte est un légume-racine doux et croquant. Elle est largement utilisée dans de nombreux plats, tels que les soupes, les ragoûts, les sautés et même les desserts. La carotte est appréciée pour sa couleur vibrante, son goût sucré et sa teneur élevée en vitamines.",
       "prixAchat": 1,
-      "prixVente": 2
+      "prixVente": 5,
+      "humidite": 0.5,
+      "temperature": 15,
+      "tempsDePousse": 30
     },
     {
-        "nom" : "Avocat",
-        "image" : "Avocat.png",
-        "raccourci" : "A",
-        "description" : "L'avocat est un fruit-légume riche en graisses saines. Il est souvent utilisé dans les salades, les sauces et les guacamoles. Il est apprécié pour sa texture crémeuse et son goût riche.",
-        "prixAchat" : 1,
-        "prixVente" : 2
+      "nom" : "Avocat",
+      "image" : "Avocat.png",
+      "raccourci" : "A",
+      "description" : "L'avocat est un fruit-légume riche en graisses saines. Il est souvent utilisé dans les salades, les sauces et les guacamoles. Il est apprécié pour sa texture crémeuse et son goût riche.",
+      "prixAchat" : 1,
+      "prixVente" : 10,
+      "humidite": 1,
+      "temperature": 10,
+      "tempsDePousse": 30
     },
     {
       "nom": "Chou",
@@ -38,7 +50,10 @@
       "raccourci": "F",
       "description": "Le chou est un légume-feuille croquant et riche en nutriments. Il est souvent utilisé dans les salades, les soupes et les sautés. Il est apprécié pour sa texture croquante et sa saveur riche.",
       "prixAchat": 1,
-      "prixVente": 2
+      "prixVente": 2,
+      "humidite": 0.5,
+      "temperature": 15,
+      "tempsDePousse": 30
     },
     {
       "nom":"Pomme",
@@ -46,7 +61,10 @@
       "raccourci":"P",
       "description":"La pomme est un fruit-légume croquant et juteux. Elle est souvent utilisée dans les salades, les tartes et les compotes. Elle est appréciée pour sa saveur sucrée et sa texture croquante.",
       "prixAchat":1,
-      "prixVente":2
+      "prixVente":2,
+      "humidite": 0.5,
+      "temperature": 15,
+      "tempsDePousse": 30
     },
     {
       "nom":"Noix de coco",
@@ -54,7 +72,10 @@
       "raccourci":"N",
       "description":"La noix de coco est un fruit-légume riche en graisses saines. Elle est souvent utilisée dans les salades, les sauces et les desserts. Elle est appréciée pour sa texture crémeuse et son goût riche.",
       "prixAchat":1,
-      "prixVente":2
+      "prixVente":20,
+      "humidite": 5,
+      "temperature": 15,
+      "tempsDePousse": 30
     }
   ],
   "argent": 100,
@@ -62,11 +83,11 @@
   "hauteur": 10,
   "mouette": {
     "max": 5,
-    "chanceApparition": 0.005,
+    "chanceApparition": 0.05,
     "taille": 64,
-    "vitesseDeMange":0.005,
-    "vitesseDeDeplacementMin": 0.01,
-    "vitesseDeDeplacementMax": 0.05,
+    "vitesseDeMange":0.05,
+    "vitesseDeDeplacementMin": 0.1,
+    "vitesseDeDeplacementMax": 0.5,
     "chanceDeManger": 0.5,
     "images": [
       "Mouette1.png",
@@ -101,5 +122,14 @@
     "prixVente":5,
     "portee": 2,
     "raccourci": "E"
+  },
+  "lac": {
+    "nom": "Lac",
+    "image": "Lac.png",
+    "prixAchat":10,
+    "prixVente":5,
+    "humidite":0.6,
+    "disipation":0.2,
+    "raccourci": "L"
   }
 }

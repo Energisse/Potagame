@@ -25,7 +25,7 @@ public class Parcelle implements Runnable, Serializable {
     /**
      * Taux d'humidité de la parcelle
      */
-    private int humidite;
+    private float humidite;
 
 
     /**
@@ -54,6 +54,11 @@ public class Parcelle implements Runnable, Serializable {
     private int nbEpouvantail;
 
     /**
+     * Effet des lac sur la parcelle
+     */
+    private int effetLac;
+
+    /**
      * Constructeur de la parcelle
      * @param x Coordonnées X
      * @param y Coordonnées Y
@@ -65,9 +70,6 @@ public class Parcelle implements Runnable, Serializable {
 
         // Initialisation de l'humidité de 0 a 100 de manière aléatoire
         this.humidite = (int) (Math.random() * 100);
-
-        // Initialisation de l'humidité
-        this.humidite = 0;
 
         genererHerbe();
         // chance sur 2 d'avoir un rocher si de l'herbe
@@ -110,8 +112,19 @@ public class Parcelle implements Runnable, Serializable {
      */
     @Override
     public void run() {
-        humidite+=(int) (Math.random() *Modele.getInstance().getMeteo().humidite());
-        if (this.humidite > 100) this.humidite = 100;
+        humidite+=((float)effetLac)/100;
+        if(75 < Modele.getInstance().getMeteo().humidite() && this.humidite < Modele.getInstance().getMeteo().humidite()){
+            humidite+=Math.random()*2;
+        }
+        else {
+            humidite-=Math.random()*1;
+        }
+        if(humidite < 0){
+            humidite = 0;
+        }
+        if(humidite > 100){
+            humidite = 100;
+        }
 
         //Si la parcelle contient un légume, on le fait pousser
         if (this.legume != null) {
@@ -136,7 +149,7 @@ public class Parcelle implements Runnable, Serializable {
      * Retourne le taux d'humidité de la parcelle
      * @return int
      */
-    public int getHumidite() {
+    public float getHumidite() {
         return this.humidite;
     }
 
@@ -144,7 +157,7 @@ public class Parcelle implements Runnable, Serializable {
      * Modifie le taux d'humidité de la parcelle
      * @param i Nouveau taux d'humidité
      */
-    public void setHumidite(int i) {
+    public void setHumidite(float i) {
         this.humidite = i;
     }
 
@@ -237,5 +250,28 @@ public class Parcelle implements Runnable, Serializable {
      */
     public void setNbEpouvantail(int nbEpouvantails) {
         this.nbEpouvantail = nbEpouvantails;
+    }
+
+    /**
+     * Retourne l'effet du lac
+     * @return float
+     */
+    public int getEffetLac() {
+        return this.effetLac;
+    }
+
+    /**
+     * Modifie l'effet du lac
+     * @param effetLac Effet du lac
+     */
+    public void setEffetLac(int effetLac) {
+        this.effetLac = effetLac;
+    }
+
+    /**
+     * Enleve les fleures
+     */
+    public void enlverFleures() {
+        this.fleure = -1;
     }
 }

@@ -58,6 +58,14 @@ public class Config {
      */
     private ConfigEpouvantail epouvantail;
 
+    /**
+     * Config lac
+     */
+    private ConfigLac lac;
+
+    /**
+     * Constructeur de Config
+     */
     private Config(){
     }
 
@@ -132,5 +140,13 @@ public class Config {
      */
     public ConfigFabriqueLegume[] getFabriqueLegumes() {
         return legumes;
+    }
+
+    /**
+     * Retourne la config du lac
+     * @return lac
+     */
+    public ConfigLac getConfigLac() {
+        return lac;
     }
 }

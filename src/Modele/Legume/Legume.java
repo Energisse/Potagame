@@ -7,35 +7,40 @@ public class Legume implements Serializable{
     /**
      * Croissance du légume
      */
-    protected float croissance = 0;
-
-    /**
-     * Taux de croissance du légume dépendant de la température du jour et de l'humidité de la parcelle
-     * Si les conditions sont mauvaises, le taux de croissance reduit jusqu'a 0
-     * Si les conditions sont bonnes, le taux de croissance augmente jusqu'a 2
-     * Attention : Il faut que le taux soit compris entre ces 2 valeurs car sinon la condition AFinitCroissance ne serait
-     * pas vérifier: on aurait alors l'image qui augmente de plus en plus et qui ne ressemblerait à rien !
-     */
-    protected int tauxCroissance = 1;
-    /**
-     * Vie du légume
-     */
-    protected int vie = 100;
+    private float croissance = 0;
 
     /**
      * Prix du légume
      */
-    protected int prix;
+    private final int prix;
 
     /**
      * Nom
      */
-    protected String nom;
+    private final String nom;
+
+    /**
+     * Temperature optimale du légume
+     */
+    private final float temperatureOptimale;
+
+    /**
+     * Humidité optimale du légume
+     */
+    private final float humiditeOptimale;
+
+    /**
+     * temps de pousse en jour
+     */
+    private final float tempsDePousse;
 
     //Constructeur
-    public Legume(String nom, int prix){
+    public Legume(String nom, int prix, float temperature, float humidite, float tempsPousse){
         this.nom = nom;
         this.prix = prix;
+        this.temperatureOptimale = temperature;
+        this.humiditeOptimale = humidite;
+        this.tempsDePousse = tempsPousse;
     }
 
     /**
@@ -43,7 +48,7 @@ public class Legume implements Serializable{
      * @return int
      */
     public int getPrixRevente(){
-        return prix;
+        return (int) (prix*(1-tauxPourriture)*(1-tauxBrulure));
     }
 
     /**
@@ -70,7 +75,7 @@ public class Legume implements Serializable{
     /**
      *  tauxMaladie du légume de 0 a 1
      */
-    private float tauxMaladie = 0;
+    private float tauxPourriture = 0;
 
     /**
      * Fait pousser le légume
@@ -78,34 +83,40 @@ public class Legume implements Serializable{
      * sur le potager ainsi que la valeur d'humidité propre à chaque parcelle: la vitesse de pousse devrait donc être légèrement différente selon les parcelles
      */
     public void pousser(Parcelle parcelle){
-        tauxCroissance=(int)((Modele.getInstance().getMeteo().temperature()/parcelle.getHumidite())*10+0.5);
-        if(tauxCroissance == 0 ){ //Les valeurs étant souvent en 0.xxx, le cast en int peut retourner 0 ce qui ne permettrait pas de faire pousser la plante
-            tauxCroissance=1;
+        if(aFinitCroissance())return;
+        //50% liée à la température, 50% liée à l'humidité
+
+        float temperature = Modele.getInstance().getMeteo().temperature();
+
+        float diffTemperature = temperature/temperatureOptimale;
+        //si la température est trop éloignée de la température optimale, le taux de croissance est null
+        if(diffTemperature <= 0.5){
+            return;
         }
-        if(tauxCroissance>2){ //De même certaines valeurs peuvent être plus grande que 2 ce que l'on ne veut pas comme mentionner plus haut
-            tauxCroissance=2;
+        //si la température est loin de la température optimale alors le legume brule
+        if(diffTemperature >= 2){
+            tauxBrulure+=0.01;
+            if(tauxBrulure > 1)tauxBrulure = 1;
+            return;
         }
-        if(!aFinitCroissance()){
-            if(parcelle.getHumidite() > 2){
-                croissance += tauxCroissance;
-                parcelle.setHumidite(parcelle.getHumidite() - 2); //L'humidite de la parcelle diminue au fur et à mesure de la croissance de la plante
-            }
+
+        float tauxDeCroissance = 50;
+
+        if(parcelle.getHumidite() > humiditeOptimale){
+            tauxDeCroissance += 50;
+            parcelle.setHumidite(parcelle.getHumidite()-humiditeOptimale);
         }
         else{
-            if(parcelle.getHumidite() > 1){
-                parcelle.setHumidite(parcelle.getHumidite() - 1);
-            }
-            //La maladie sur les plantes évolue en fonction de la météo
-            //Si très sec il n'y a quasi aucune augmentation de la maladie mais si très humide le risque est plus élevé
-            if (parcelle.getHumidite() < 50){
-                tauxMaladie += 0.001;
-            }
-            else{
-                tauxMaladie += 0.008;
-            }
-            if(tauxMaladie > 1) tauxMaladie = 1;
-
+            //si l'humidité est trop faible, le légume pourrit
+            tauxDeCroissance -= 25;
+            tauxPourriture += 0.01;
+            if(tauxPourriture > 1)tauxPourriture = 1;
+            parcelle.setHumidite(0);
         }
+        if(tauxDeCroissance < 0)return;
+        croissance += tauxDeCroissance/(tempsDePousse *24);
+        if(croissance > 100)croissance = 100;
+
     }
 
     /**
@@ -113,7 +124,7 @@ public class Legume implements Serializable{
      * @return boolean
      */
     private boolean aFinitCroissance(){
-        return croissance == 100;
+        return croissance == 100 || tauxPourriture == 1 || tauxBrulure == 1;
     }
 
     /**
@@ -129,7 +140,7 @@ public class Legume implements Serializable{
      * @return boolean
      */
     public boolean estRecoltable(){
-        return aFinitCroissance() && vie > 0;
+        return aFinitCroissance();
     }
 
     /**
@@ -144,7 +155,7 @@ public class Legume implements Serializable{
      * Renvoie le taux de maladie du légume
      * @return float
      */
-    public float getTauxMaladie() {
-        return tauxMaladie;
+    public float getTauxPourriture() {
+        return tauxPourriture;
     }
 }

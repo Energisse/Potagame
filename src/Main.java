@@ -1,5 +1,6 @@
 import Config.Config;
 import Modele.Fabrique.FabriqueEpouvantail;
+import Modele.Fabrique.FabriqueLac;
 import Modele.Fabrique.FabriqueLegume;
 import Modele.Modele;
 import Modele.Ordonnanceur;
@@ -11,6 +12,7 @@ public class Main {
         Config.load();
         FabriqueLegume.load(Config.getInstance().getFabriqueLegumes());
         FabriqueEpouvantail.load(Config.getInstance().getConfigEpouvantail());
+        FabriqueLac.load(Config.getInstance().getConfigLac());
 
         try {
             Sauvegarde.charger();

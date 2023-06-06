@@ -6,5 +6,8 @@ public record ConfigFabriqueLegume(
         String raccourci,
         String description,
         int prixAchat,
-        int prixVente
+        int prixVente,
+        float temperature,
+        float humidite,
+        float tempsDePousse
 ) { }

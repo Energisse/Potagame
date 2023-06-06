@@ -11,9 +11,9 @@ public class VitessePanel extends JPanel{
      * Constructeur du VitessePanel
      */
     public VitessePanel(){
-        super(new GridLayout(1,2));
+        super(new GridLayout(2,1));
 
-        JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 10, 1);
+        JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 12, 1);
         slider.addChangeListener(e -> Modele.getInstance().setVitesse(slider.getValue()));
         slider.setValue(Modele.getInstance().getVitesse());
         slider.setPaintTicks(true);

@@ -15,7 +15,10 @@ public class FabriqueLegume extends  Fabrique<Legume> {
                     configFabriqueLegume.raccourci(),
                     configFabriqueLegume.description(),
                     configFabriqueLegume.prixAchat(),
-                    configFabriqueLegume.prixVente()
+                    configFabriqueLegume.prixVente(),
+                    configFabriqueLegume.temperature(),
+                    configFabriqueLegume.humidite(),
+                    configFabriqueLegume.tempsDePousse()
             );
         }
     }
@@ -37,13 +40,31 @@ public class FabriqueLegume extends  Fabrique<Legume> {
     private final int prixVente;
 
     /**
+     * Temperature optimale du légume
+     */
+    private final float temperature;
+
+    /**
+     * Humidité optimale du légume
+     */
+    private final float humidite;
+
+    /**
+     * temps de pousse
+     */
+    private final float tempsPousse;
+
+    /**
      * Constructeur
      */
-    private FabriqueLegume(String nom, String image, String raccourci, String description, int prixAchat, int prixVente) {
+    private FabriqueLegume(String nom, String image, String raccourci, String description, int prixAchat, int prixVente, float temperature, float humidite, float tempsDePousse) {
         super(nom, image, raccourci);
         this.description = description;
         this.prixAchat = prixAchat;
         this.prixVente = prixVente;
+        this.temperature = temperature;
+        this.humidite = humidite;
+        this.tempsPousse = tempsDePousse;
     }
 
     /**
@@ -62,7 +83,7 @@ public class FabriqueLegume extends  Fabrique<Legume> {
      */
     @Override
     public Legume creer(Parcelle parcelle) {
-        return new Legume(getNom(),prixVente);
+        return new Legume(getNom(),prixVente,temperature,humidite,tempsPousse);
     }
 
     /**

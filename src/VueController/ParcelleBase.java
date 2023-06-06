@@ -144,30 +144,29 @@ public class ParcelleBase extends JLayeredPane  implements Observer{
 
         if(legume != null){
             //Calcul de la taille de l'image en fonction de la croissance du legume
-            int taille = (int)(TAILLE*legume.getCroissance()/100);
+            int taille = (int)((TAILLE*0.8)*legume.getCroissance()/100);
             if(taille < 5)taille = 5;
 
+            ImageIcon image = imageMap.get(legume.getNom());
             //On met a jour l'image du legume
             //Si le legume est malade on met a jour l'image en fonction de la maladie
             if(Modele.getInstance().getTauxMaladie(indiceX, indiceY) > 0){
-                labelLegume.setIcon(new ImageIcon(intersectionImage(
-                        imageMap.get(legume.getNom()),
+                image = new ImageIcon(intersectionImage(
+                        image,
                         imageMap.get("pourriture"),
                         Modele.getInstance().getTauxMaladie(indiceX,indiceY)
-                ).getScaledInstance(taille,taille, Image.SCALE_SMOOTH)));
+                ));
             }
             //Si le legume est brulé on met a jour l'image en fonction du taux de brulure
-            else if(Modele.getInstance().getTauxBrulure(indiceX, indiceY) > 0){
-                labelLegume.setIcon(new ImageIcon(intersectionImage(
-                        imageMap.get(legume.getNom()),
+            if(Modele.getInstance().getTauxBrulure(indiceX, indiceY) > 0){
+                image =  new ImageIcon(intersectionImage(
+                        image,
                         imageMap.get("crame"),
                         Modele.getInstance().getTauxBrulure(indiceX,indiceY)
-                ).getScaledInstance(taille,taille, Image.SCALE_SMOOTH)));
+                ));
             }
-            //Sinon on met a jour l'image du legume
-            else{
-                labelLegume.setIcon(new ImageIcon(imageMap.get(legume.getNom()).getImage().getScaledInstance(taille,taille, Image.SCALE_SMOOTH)));
-            }
+
+            labelLegume.setIcon(new ImageIcon(image.getImage().getScaledInstance(taille,taille, Image.SCALE_SMOOTH)));
 
             //Positionnement de l'image du legume
             labelLegume.setBounds((TAILLE/2)-(taille/2),0,TAILLE, TAILLE);
@@ -261,7 +260,7 @@ public class ParcelleBase extends JLayeredPane  implements Observer{
         // Libérer les ressources graphiques
         g2d.dispose();
 
-        return superpossitionImage(new ImageIcon(sortie),source,1-alpha);
+        return superpossitionImage(source,new ImageIcon(sortie),alpha);
     }
 
     /**
