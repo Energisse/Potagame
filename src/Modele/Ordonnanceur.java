@@ -1,7 +1,5 @@
 package Modele;
 
-import Modele.Meteo.Meteo;
-
 public class Ordonnanceur extends Thread {
     private static Ordonnanceur ord;
 
