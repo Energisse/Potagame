@@ -46,6 +46,12 @@ public class Modele extends Observable implements Runnable, Serializable {
     private final  GestionaireMouette gestionaireMouette = new GestionaireMouette();
 
     /**
+     * Variable décomptant le temps passé à réactualiser les parcelles lié à la valeur du slider de vitesse de pousse
+     * Elle est ensuite utilisée pour permettre la sélection d'un meteoData à un time précis
+     */
+    public int temps = 0;
+
+    /**
      * Instance du modèle
      */
     private static Modele instance = null;
@@ -107,6 +113,9 @@ public class Modele extends Observable implements Runnable, Serializable {
         instance.addObserver(Vue.getInstance());
     }
 
+    /**
+     * Mise à jour des parcelles pour un temps de simulation = vitesse modifiée par le slider
+     **/
     @Override
     public void run() {
         for(int i = 0; i < vitesse; i++){
@@ -117,6 +126,7 @@ public class Modele extends Observable implements Runnable, Serializable {
                     tabParcelles[x][y].run();
                 }
             }
+            temps++;
         }
         setChanged();
         notifyObservers();
@@ -384,6 +394,14 @@ public class Modele extends Observable implements Runnable, Serializable {
     public int getNbEpouvantail(int indiceX, int indiceY) {
         return tabParcelles[indiceX][indiceY].getNbEpouvantail();
     }
+
+    /**
+     * Renvoie la valeur de temps s'écoulant pour le passage de la météo
+     */
+    public int getTemps() {
+        return temps;
+    }
+
 }
 
 

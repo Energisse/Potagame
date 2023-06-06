@@ -1,4 +1,8 @@
 package VueController;
+import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 
 import Modele.Legume.Legume;
@@ -9,9 +13,17 @@ import VueController.ClavierListener.ClavierListener;
 import VueController.Mouette.GestionnaireMouette;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -99,6 +111,24 @@ public class Vue extends JFrame implements Observer {
 
         setJMenuBar(new BarMenu());
 
+        //Panel principal contenant toutes les parcelles du potager
+        JPanel jpn = new JPanel (new GridLayout(Modele.getInstance().getLargeur(),Modele.getInstance().getHauteur()));
+
+        //Panel affichant la météo et les infos d'une parcelle
+        JPanel menu = new JPanel (new GridLayout(5,1));
+        menu.setPreferredSize(new Dimension(300,500));
+        menu.setBackground(new Color(134,151,224));
+
+        //Affichage de l'heure dynamique et de la date actuelle
+        JLabel clock = new JLabel();
+        clock.setFont(new Font("",Font.BOLD, 20));
+        clock.setHorizontalAlignment(clock.CENTER);
+        Timer timer = new Timer(1000, e -> clock.setText(DateFormat.getDateTimeInstance().format(new Date())));
+        timer.setRepeats(true);
+        timer.setCoalesce(true);
+        timer.setInitialDelay(0);
+        timer.start();
+        menu.add(clock);
         //Contient les parcelles + les mouettes
         JLayeredPane parcellesContainer = new JLayeredPane();
         //contient les parcelles
@@ -107,13 +137,38 @@ public class Vue extends JFrame implements Observer {
 
         JPanel menu = new JPanel(new GridLayout(3, 1));
 
+        //Affichage météo
+        menu.add(MeteoPanel.getInstance());
+
+
+//        //Création son
+//        try {
+//            Clip audio = AudioSystem.getClip();
+//            //audio.open(AudioSystem.getAudioInputStream(class.getResource()));
+//            audio.start();
+//            audio.loop(Clip.LOOP_CONTINUOUSLY);
+//            //audio.stop();
+//        } catch (LineUnavailableException e) {
+//            throw new RuntimeException(e);
+//        }
+
+
+        //Création slider de vitesse de pousse
         JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 10, 1);
         slider.addChangeListener(e -> Modele.getInstance().setVitesse(slider.getValue()));
+        slider.setPaintTicks(true);
+        slider.setPaintTrack(true);
+        slider.setPaintLabels(true);//Le tout permet l'affichage des traits et valeurs du slider
+        slider.setMajorTickSpacing(1);
+        slider.setOpaque(false);
         //Non focusable pour ne pas provoquer d'interférence avec le clavier
         slider.setFocusable(false);
+        //Affichage slider de vitesse de pousse
+        menu.add(new JLabel("Vitesse de pousse :"));
+
         menu.add(slider);
 
-        try {
+        try{
             menu.add(ArgentPanel.getInstance());
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,12 +205,20 @@ public class Vue extends JFrame implements Observer {
 
         // Ajout des composants à la fenêtre
         add(parcellesContainer);
+        //Ajout du panel principal et du panneau latéral de menu à la fenêtre
         add(menu);
         pack();
     }
 
+    /**
+     * Mise à jour de la vue de toutes les parcelles
+     * @param o     the observable object.
+     * @param arg   an argument passed to the {@code notifyObservers}
+     *                 method.
+     */
     @Override
     public void update(Observable o, Object arg) {
+        MeteoPanel.getInstance().update(o,arg);
         parcelleSelectionnee.update(o, arg);
         int x = positionSelectionnee[0];
         int y = positionSelectionnee[1];

@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import Config.Config;
 import Modele.Legume.Legume;
+import Modele.Meteo.Meteo;
 import Modele.Objet.Objet;
 
 public class Parcelle implements Runnable, Serializable {
@@ -66,6 +67,9 @@ public class Parcelle implements Runnable, Serializable {
         // Initialisation de l'humidité de 0 a 100 de manière aléatoire
         this.humidite = (int) (Math.random() * 100);
 
+        // Initialisation de l'humidité
+        this.humidite = 0;
+
         genererHerbe();
         // chance sur 2 d'avoir un rocher si de l'herbe
         if (this.herbe && this.fleure == -1)
@@ -101,10 +105,13 @@ public class Parcelle implements Runnable, Serializable {
         return this.legume;
     }
 
+    /**
+     * Fonction permettant l'execution des différent process sur une parcelle
+     * Le choix de l'humidité d'une parcelle est effectuer de manière aléatoire en rapport à celle du jour
+     */
     @Override
     public void run() {
-        //mise a jour de l'humidité
-        this.humidite++;
+        humidite+=(int) (Math.random() * Meteo.getInstance().getMeteodata(Modele.getInstance().getTemps()).getHumiditeDuJour());
         if (this.humidite > 100) this.humidite = 100;
 
         //Si la parcelle contient un légume, on le fait pousser
