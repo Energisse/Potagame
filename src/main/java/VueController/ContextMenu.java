@@ -108,7 +108,9 @@ public class ContextMenu extends JPopupMenu{
                 else{
                     if (Modele.getInstance().getLegume(p.getIndiceX(),p.getIndiceY()) != null){
                         add(boutonAracher);
-                        boutonRecolter.setEnabled(Modele.getInstance().getLegume(p.getIndiceX(), p.getIndiceY()).estRecoltable());
+                        if(Modele.getInstance().getLegume(p.getIndiceX(), p.getIndiceY()).estRecoltable()){
+                            add(boutonRecolter);
+                        }
                     }
                     else if(Modele.getInstance().getObjet(p.getIndiceX(),p.getIndiceY()) == null){
                         add(boutonPlanter);
@@ -116,8 +118,10 @@ public class ContextMenu extends JPopupMenu{
                     }
                 }
                 if(!Modele.getInstance().getParcelle(p.getIndiceX(), p.getIndiceY()).aUnRocher()){
-                    if(Modele.getInstance().getParcelle(p.getIndiceX(),p.getIndiceY()).getObjet() == null && Modele.getInstance().getParcelle(p.getIndiceX(),p.getIndiceY()).getLegume() == null){
-                        add(boutonPoser);
+                    if(Modele.getInstance().getParcelle(p.getIndiceX(),p.getIndiceY()).getObjet() == null){
+                        if( Modele.getInstance().getParcelle(p.getIndiceX(),p.getIndiceY()).getLegume() == null){
+                            add(boutonPoser);
+                        }
                     }
                     else{
                         add(boutonEnleverObjet);

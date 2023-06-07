@@ -55,7 +55,7 @@ public class ClavierListener implements KeyListener {
             //Enlever un objet/legume
             case KeyEvent.VK_BACK_SPACE -> {
                 int[] position = Modele.getInstance().getParcelleSelectionnee();
-                if(Modele.getInstance().getObjet(position[0],position[1]) != null)
+                if(Modele.getInstance().getObjet(position[0],position[1]) != null || Modele.getInstance().getLegume(position[0],position[1]) != null)
                     Modele.getInstance().enlever(position[0],position[1]);
                 else if(Modele.getInstance().aUnRocher(position[0],position[1]))
                     Modele.getInstance().miner(position[0],position[1]);
