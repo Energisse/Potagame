@@ -76,6 +76,17 @@
       "humidite": 5,
       "temperature": 15,
       "tempsDePousse": 30
+    },
+    {
+      "nom":"Chocolatine",
+      "image":"Chocolatine.png",
+      "raccourci":"W",
+      "description":"Chocolatine > Pain au chocolat",
+      "prixAchat":10,
+      "prixVente":200,
+      "humidite": 0.5,
+      "temperature": 15,
+      "tempsDePousse": 5
     }
   ],
   "argent": 100,
