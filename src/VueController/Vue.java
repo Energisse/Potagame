@@ -1,23 +1,12 @@
 package VueController;
-import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
+
 import javax.swing.*;
-
 import Modele.Modele;
-
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
@@ -98,16 +87,18 @@ public class Vue extends JFrame implements Observer {
         menu.add(MeteoPanel.getInstance());
 
 
-//        //Création son
-//        try {
-//            Clip audio = AudioSystem.getClip();
-//            //audio.open(AudioSystem.getAudioInputStream(class.getResource()));
-//            audio.start();
-//            audio.loop(Clip.LOOP_CONTINUOUSLY);
-//            //audio.stop();
-//        } catch (LineUnavailableException e) {
-//            throw new RuntimeException(e);
-//        }
+      /*  //Création son
+        try {
+            Clip audio = AudioSystem.getClip();
+            audio.open(AudioSystem.getAudioInputStream(new FileInputStream("./src/son/Cybersdf-Dolling.wav")));
+            audio.start();
+            audio.loop(Clip.LOOP_CONTINUOUSLY);
+            //audio.stop();
+        } catch (LineUnavailableException e) {
+            throw new RuntimeException(e);
+        } catch (UnsupportedAudioFileException e) {
+            throw new RuntimeException(e);
+        }*/
 
 
         //Création slider de vitesse de pousse

@@ -5,8 +5,8 @@ import java.io.IOException;
 
 
 public class Meteo {
-    private static float temperature=1;
-    private static float humidite=1;
+    private float temperature=1;
+    private float humidite=1;
     private static Meteo instance = null;
     /**
      * Tableau stockant des meteoData possédant chacun une température et une humidité

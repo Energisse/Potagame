@@ -13,18 +13,9 @@ import java.util.Observer;
 public class MeteoPanel extends JPanel implements Observer {
     private static MeteoPanel instance = null;
     private JLabel meteoJLabel;
-    static int evolutionIcone =0 ;
+    static int evolutionIcone=1;
     static ArrayList<String> typeMeteo= new ArrayList<String>(Arrays.asList("soleil","nuageux","pluie"));
-    private ImageIcon iconeMeteo;
-
-    static {
-        try {
-            ImageIcon iconeMeteo = new ImageIcon(ImageIO.read(new File("./src/images/"+typeMeteo.get(evolutionIcone)+".png")));
-            System.out.println("utilisation du bloc static récupérant la valeur :"+typeMeteo.get(evolutionIcone));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private ImageIcon iconeMeteo= new ImageIcon(ImageIO.read(new File("./src/images/"+typeMeteo.get(evolutionIcone)+".png")));
 
     /**
      * Constructeur de MeteoPanel permettant de faire passer l'affichage de la météo
@@ -32,13 +23,21 @@ public class MeteoPanel extends JPanel implements Observer {
      */
     public MeteoPanel() throws IOException {
         super();
-        iconeMeteo = new ImageIcon(ImageIO.read(new File("./src/images/soleil.png")));
-        setOpaque(false);
+        float temperatureTi= Meteo.getInstance().getMeteodata(Modele.getInstance().getTemps()).getTemperatureDuJour();
+        float humiditeTi=Meteo.getInstance().getMeteodata(Modele.getInstance().getTemps()).getHumiditeDuJour();
+        if (humiditeTi <=60 ){
+            evolutionIcone=0;//0=soleil
+        }
+        else if(humiditeTi<=75){
+            evolutionIcone=1;//1=nuageux
+        }
+        else{
+            evolutionIcone=2;//2=pluie
+        }
         add(new JLabel(iconeMeteo));
-        System.out.println("ajout de l'iconemeteo depuis le constructeur MeteoPanel");
         meteoJLabel = new JLabel("<html> Votre météo du jour : "+
-                    "<br> - Température : " + Meteo.getInstance().getMeteodata(Modele.getInstance().getTemps()).getTemperatureDuJour() +"°C" +
-                    "<br> - Humidité : " + Meteo.getInstance().getMeteodata(Modele.getInstance().getTemps()).getHumiditeDuJour() + "% </html>");
+                    "<br> - Température : " + temperatureTi +"°C" +
+                    "<br> - Humidité : " + humiditeTi + "% </html>");
         meteoJLabel.setHorizontalAlignment(meteoJLabel.CENTER);
         add(meteoJLabel);
         setOpaque(false);
@@ -65,7 +64,6 @@ public class MeteoPanel extends JPanel implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-        //int evolutionIcone ;
         float temperatureTi= Meteo.getInstance().getMeteodata(Modele.getInstance().getTemps()).getTemperatureDuJour();
         float humiditeTi=Meteo.getInstance().getMeteodata(Modele.getInstance().getTemps()).getHumiditeDuJour();
         if (humiditeTi <=60 ){
@@ -78,16 +76,20 @@ public class MeteoPanel extends JPanel implements Observer {
             evolutionIcone=2;//2=pluie
         }
         try {
-            //iconeMeteo = new ImageIcon(ImageIO.read(new File("./src/images/"+typeMeteo.get(evolutionIcone)+".png")));
-            new JLabel().setIcon(iconeMeteo);
+            if(Modele.getInstance().getTemps()==Modele.getInstance().getVitesse()){
+                //iconeMeteo = new ImageIcon(ImageIO.read(new File("./src/images/"+typeMeteo.get(evolutionIcone)+".png")));
+                //new JLabel().setIcon(iconeMeteo);
+                add(new JLabel(iconeMeteo));
+            }
             System.out.println("ajout de l'iconemeteo depuis le update de MeteoPanel");
+            System.out.println("evolutionIcone="+evolutionIcone);
             meteoJLabel.setText("<html> La météo du jour : "+
                     "<br> - Température : "+temperatureTi+"°C" +
                     "<br> - Humidité : "+humiditeTi+"% </html>");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("evolutionIcone="+evolutionIcone);
+
     }
 }
 
