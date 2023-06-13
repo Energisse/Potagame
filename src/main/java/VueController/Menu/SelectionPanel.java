@@ -67,7 +67,7 @@ public class SelectionPanel extends JPanel implements Observer {
 
         String info = "Parcelle : " +type + "\nHumidité : " + Math.floor(humidite);
         if(legume != null){
-            info += "\nLegume : " + legume.getNom() + "\nCroissance : " + legume.getCroissance() + "\nPourriture :" + Math.floor(legume.getTauxPourriture() * 100) + "%" +"\nCramée :" + Math.floor(legume.getTauxBrulure() * 100) + "%";
+            info += "\nLegume : " + legume.getNom() + "\nCroissance : " + (int)legume.getCroissance() +"%" + "\nPourriture :" + Math.floor(legume.getTauxPourriture() * 100) + "%" +"\nCramée :" + Math.floor(legume.getTauxBrulure() * 100) + "%";
         }
         else {
             info += "\nLegume : Aucun";

@@ -2,8 +2,8 @@ package Config;
 
 import com.google.gson.Gson;
 
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class Config {
 
@@ -11,15 +11,30 @@ public class Config {
      * Instance de la config
      */
     private static Config instance;
-
     static {
-        String nomFichier = "src/main/java/Config/config.json";
-        try (FileReader reader = new FileReader(nomFichier)) {
-            Gson gson = new Gson();
-            instance = gson.fromJson(reader, Config.class);
-        } catch (IOException e) {
+        String json= "";
+        try {
+            InputStream is = Config.class.getClassLoader().getResourceAsStream("Config/config.json");
+            if (is == null) {
+                System.err.println("Null.........................");
+            }
+            InputStreamReader isReader = new InputStreamReader(is, StandardCharsets.UTF_8);
+            BufferedReader reader = new BufferedReader(isReader);
+            StringBuffer sb = new StringBuffer();
+            String str;
+            while ((str = reader.readLine()) != null) {
+                sb.append(str);
+            }
+            reader.close();
+            isReader.close();
+            is.close();
+            json= sb.toString();
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
+        Gson gson = new Gson();
+        instance = gson.fromJson(json, Config.class);
     }
 
 
@@ -67,6 +82,7 @@ public class Config {
      * Constructeur de Config
      */
     private Config(){
+
     }
 
     /**

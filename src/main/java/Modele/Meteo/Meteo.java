@@ -1,7 +1,6 @@
 package Modele.Meteo;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 
 public class Meteo {
@@ -43,8 +42,9 @@ public class Meteo {
         meteoData = new MeteoData[366];
         int k=0;
         try {
-            FileReader fr = new FileReader("./src/main/java/donneesmeteo/tu_meteofrance_119_stations.csv");///src/donneesmeteo/Juin2023.csv
-            BufferedReader bfr = new BufferedReader(fr);
+            InputStream is= Meteo.class.getClassLoader().getResourceAsStream("donneesmeteo/tu_meteofrance_119_stations.csv");
+            InputStreamReader isr=new InputStreamReader(is, StandardCharsets.UTF_8);
+            BufferedReader bfr = new BufferedReader(isr);
             String line = null;
             //On échappe la première ligne correspondant au nom des colonnes et on lit la 2nd qui est le début des valeurs du fichier
             for (int i = 0; i < 2; i++) {
@@ -75,7 +75,7 @@ public class Meteo {
 
     /**
      * Getter d'un meteoData pour un temps(horaire) donné
-     * Retourne une temperature et une humidite pour 1h
+     * Retourne une temperature et une humidite pour 1 jour
      * @param time temps
      * @return MeteoData
      */

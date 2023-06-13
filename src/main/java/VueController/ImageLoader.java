@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 public class ImageLoader {
 
@@ -18,7 +19,8 @@ public class ImageLoader {
      */
     public static BufferedImage loadImage(String path) {
         try {
-            return ImageIO.read(new File("./src/main/java/images/"+path));
+            URL url =ImageLoader.class.getClassLoader().getResource("images/"+path);
+            return ImageIO.read(url);
         } catch (IOException e) {
             throw new RuntimeException("Le fichier " + path + " n'a pas pu être chargé",e);
         }

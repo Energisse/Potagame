@@ -1,5 +1,4 @@
 import Modele.Sauvegarde;
-
 import Config.Config;
 import Modele.Fabrique.FabriqueEpouvantail;
 import Modele.Fabrique.FabriqueLac;
